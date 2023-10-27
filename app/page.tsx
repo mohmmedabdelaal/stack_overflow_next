@@ -5,6 +5,18 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="container flex justify-between align-top">
         <h1 className="container h-0">Important</h1>
+        <ul>
+          <li>className</li>
+          <li>Home</li>
+          <li>class</li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
       </div>
     </main>
   );
