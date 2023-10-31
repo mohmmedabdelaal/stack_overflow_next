@@ -9,13 +9,6 @@ export default function Home() {
           <li>className</li>
           <li>Home</li>
           <li>class</li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
         </ul>
       </div>
     </main>
