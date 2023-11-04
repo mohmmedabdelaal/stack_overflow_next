@@ -3,6 +3,8 @@
 @tailwind utilities;
 @import url('../styles/theme.css');
 
+/*
+*/
 body {
   font-family: 'Inter', sans-serif;
 }
@@ -86,35 +88,11 @@ body {
 }
 .markdown a,
 code {
-  /* These are technically the same, but use both */
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
-  /* This is the dangerous one in WebKit, as it breaks things whereve
-    word-break: break-all;
-    /* Instead use this non-standard one: */
-  word-break: break-word;
-  /* Adds a hyphen where the word breaks, if supported (No Blink) *
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-    padding: 2px;
-    color: #ff7000 !important;
-    }
-    .markdown pre {
-    display: grid;
-    width: 100%;
-    }
-    .markdown pre code {
-    width: 100%;
-    display: block;
-    overflow-x: auto;
-    color: inherit !important;
-    }
-    /* Markdown End */
-  /* Clerk */
 
+  word-break: break-word;
   .cl-internal-b3fm6y {
     background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
   }
@@ -132,7 +110,7 @@ code {
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
