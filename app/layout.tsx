@@ -1,7 +1,8 @@
 import {ClerkProvider} from "@clerk/nextjs";
 import  type {Metadata} from 'next';
-import Head from '../head';
-import '../globals.css'
+import Head from './head';
+import '../styles/globals.css'
+import {ThemeProvider} from "@/app/Context";
 
 export const metadata: Metadata = {
     title: 'DevOverflow',
@@ -16,15 +17,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <ClerkProvider>
 
     <html>
       <Head />
 
       <body>
-      <h1>From the future</h1>
-      {children}</body>
-    </html>
+      <ClerkProvider
+        appearance={
+          {
+              elements: {
+                  formButtonPrimary: 'Primary-gradient',
+                  footerActionLink: 'primary-text-gradient hover: text-primary-500'
+              }
+          }
+        }
+      >
+     {/*<ThemeProvider>*/}
+
+      {children}
+
+     {/*</ThemeProvider>*/}
       </ClerkProvider>
+      </body>
+    </html>
   );
 }
