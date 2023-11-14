@@ -12,7 +12,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState(' ');
 
   function handleChange() {
-    if (mode === 'dark') {
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) &&
+        window.matchMedia('prefers-color-scheme: dark').matches)
+    ) {
       setMode('dark');
       document.documentElement.classList.add('dark');
     } else {
@@ -22,7 +26,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }
   useEffect(() => {
     handleChange();
-  }, []);
+  }, [mode]);
   return (
     <ThemeContext.Provider value={{ mode, setMode }}>
       {children}
