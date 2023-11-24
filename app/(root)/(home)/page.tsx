@@ -1,8 +1,8 @@
 import FilterTags from '@/components/shared/FilterTags';
-import GlobalSearch from '@/components/shared/globalSearch/GlobalSearch';
+import GlobalSearch from '@/components/shared/search/GlobalSearch';
+import LocalSearch from '@/components/shared/search/LocalSearch';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Image from 'next/image';
+
 import Link from 'next/link';
 
 function Home() {
@@ -26,8 +26,8 @@ function Home() {
         className="mt-11 flex justify-between gap-5 
        max-sm:flex-col sm:items-center"
       >
-        <GlobalSearch />
-        <FilterTags />
+        <LocalSearch route='/' imgSrc='/assets/icons/search.svg' iconPlace='left' placeHolder="search for job" otherClasses="flex-1"/>
+
       </div>
     </>
   );

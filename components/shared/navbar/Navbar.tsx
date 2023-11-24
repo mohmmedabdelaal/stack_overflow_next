@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Theme from './Theme';
 import MobileNav from './MobileNav';
-import GlobalSearch from '../globalSearch/GlobalSearch';
+import GlobalSearch from '../search/GlobalSearch';
 
 function Navbar() {
   return (
