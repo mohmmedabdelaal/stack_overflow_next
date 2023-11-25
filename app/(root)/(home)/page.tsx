@@ -1,9 +1,9 @@
-import FilterTags from '@/components/shared/FilterTags';
-import GlobalSearch from '@/components/shared/search/GlobalSearch';
+import Link from 'next/link';
 import LocalSearch from '@/components/shared/search/LocalSearch';
 import { Button } from '@/components/ui/button';
-
-import Link from 'next/link';
+import Filters from "@/components/shared/Filters";
+import {HomePageFilters} from "@/constants/fitlers";
+import HomeFilters from "@/components/home/HomeFilters";
 
 function Home() {
   return (
@@ -27,8 +27,13 @@ function Home() {
        max-sm:flex-col sm:items-center"
       >
         <LocalSearch route='/' imgSrc='/assets/icons/search.svg' iconPlace='left' placeHolder="search for job" otherClasses="flex-1"/>
+        <Filters filters={HomePageFilters} otherClasses="min-h-[56px] sm:min-w-[170px]"
+                 containerClasses="hidden max-md:flex"/>
+
+
 
       </div>
+         <HomeFilters />
     </>
   );
 }
