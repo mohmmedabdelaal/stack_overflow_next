@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import LocalSearch from '@/components/shared/search/LocalSearch';
 import { Button } from '@/components/ui/button';
-import Filters from "@/components/shared/Filters";
-import {HomePageFilters} from "@/constants/fitlers";
-import HomeFilters from "@/components/home/HomeFilters";
+import Filters from '@/components/shared/Filters';
+import { HomePageFilters } from '@/constants/fitlers';
+import HomeFilters from '@/components/home/HomeFilters';
+import questions from '@/lib/questions';
+import NoResults from '@/components/shared/NoResults';
 
 function Home() {
   return (
@@ -26,14 +28,29 @@ function Home() {
         className="mt-11 flex justify-between gap-5 
        max-sm:flex-col sm:items-center"
       >
-        <LocalSearch route='/' imgSrc='/assets/icons/search.svg' iconPlace='left' placeHolder="search for job" otherClasses="flex-1"/>
-        <Filters filters={HomePageFilters} otherClasses="min-h-[56px] sm:min-w-[170px]"
-                 containerClasses="hidden max-md:flex"/>
-
-
-
+        <LocalSearch
+          route="/"
+          imgSrc="/assets/icons/search.svg"
+          iconPlace="left"
+          placeHolder="search for job"
+          otherClasses="flex-1"
+        />
+        <Filters
+          filters={HomePageFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+          containerClasses="hidden max-md:flex"
+        />
       </div>
-         <HomeFilters />
+      <HomeFilters />
+      <div className="mt-5 flex w-full flex-col gap-6">
+        {questions.length > 0 ? (
+          questions.map(({ _id, title, upvotes, answers, tags }) => (
+            <div key={question._id}>{question.title}</div>
+          ))
+        ) : (
+          <NoResults />
+        )}
+      </div>
     </>
   );
 }
