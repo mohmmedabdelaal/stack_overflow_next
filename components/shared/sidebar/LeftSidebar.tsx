@@ -46,7 +46,7 @@ const LeftSidebar = () => {
                     min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"
             >
               <Image
-                src="assets/icons/account.svg"
+                src="/assets/icons/account.svg"
                 alt="login"
                 width={20}
                 height={20}
@@ -63,7 +63,7 @@ const LeftSidebar = () => {
                     min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"
             >
               <Image
-                src="assets/icons/account.sbg"
+                src="/assets/icons/account.svg"
                 width={20}
                 height={20}
                 alt="Sing-up"

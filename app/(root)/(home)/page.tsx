@@ -6,7 +6,7 @@ import { HomePageFilters } from '@/constants/fitlers';
 import HomeFilters from '@/components/home/HomeFilters';
 import questions from '@/lib/questions';
 import NoResults from '@/components/shared/NoResults';
-import QuestionCard from "@/components/card/QuestionCard";
+import QuestionCard from '@/components/card/QuestionCard';
 
 function Home() {
   return (
@@ -45,11 +45,32 @@ function Home() {
       <HomeFilters />
       <div className="mt-5 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
-          questions.map(({ _id, title,author,createdAt, upvotes, answers, tags,views }) => (
-            <QuestionCard key={_id} _id={_id} title={title} answers={answers} author={author} createdAt={createdAt} tags={tags} upvotes={upvotes} views={views}/>
-          ))
+          questions.map(
+            ({
+              _id,
+              title,
+              author,
+              createdAt,
+              upvotes,
+              answers,
+              tags,
+              views,
+            }) => (
+              <QuestionCard
+                key={_id}
+                _id={_id}
+                title={title}
+                answers={answers}
+                author={author}
+                createdAt={createdAt}
+                tags={tags}
+                upvotes={upvotes}
+                views={views}
+              />
+            )
+          )
         ) : (
-          <NoResults />
+          <NoResults title="Not fount" description='Not found any answers or questions' linkTitle='ask a question' link='/ask-question'  />
         )}
       </div>
     </>
