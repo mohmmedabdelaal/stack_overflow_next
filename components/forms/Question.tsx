@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { QuestionsValid } from '@/lib/validations';
 import {Badge} from "@/components/ui/badge";
 import Image from "next/image";
+import {createQuestions} from "@/lib/actions/questions.actions";
 
 
 const type = 'edit'
@@ -67,23 +68,32 @@ const Question = () => {
         const newTags = field.value.filter((t: string) => t !== tag);
         form.setValue('tags', newTags);
     }
-  function onSubmit(values: z.infer<typeof QuestionsValid>) {
+  async function onSubmit(values: z.infer<typeof QuestionsValid>) {
     isSubmiting(true);
+
+    try {
+        await createQuestions({})
+    }catch (e) {
+
+    }finally {
+        isSubmiting(false)
+    }
   }
   return (
     <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <Form {...form} >
+        <form action={'fff'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="title"
+
             render={({ field }) => (
               <FormItem className="flex w-full flex-col">
                 <FormLabel className="paragraph-semeibold text-dark-400_light800">
                   Title
                 </FormLabel>
                 <FormControl className="mt-3.5">
-                  <Input
+                  <Input type={'text'}
                     className="no-focus paragraph-regular background-light700_dark300 light-border-2 text-dark-300_light700 min-h-[60px] border"
                     {...field}
                   />
