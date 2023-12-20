@@ -15,28 +15,39 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { QuestionsValid } from '@/lib/validations';
+import { QuestionsSchema } from '@/lib/validations';
 import {Badge} from "@/components/ui/badge";
 import Image from "next/image";
 import {createQuestions} from "@/lib/actions/questions.actions";
 
 
-const type = 'edit'
+const type = 'create'
 const Question = () => {
-    const [isSubmiting,setIsSubmiting] = useState(false)
+    const [isSubmitting,setIsSubmitting] = useState(false)
 
     const editorRef = useRef(null);
-  const form = useForm<z.infer<typeof QuestionsValid>>({
-    resolver: zodResolver(QuestionsValid),
+  const form = useForm<z.infer<typeof QuestionsSchema>>({
+    resolver: zodResolver(QuestionsSchema),
     defaultValues: {
       title: '',
       explanation: '',
       tags: [],
     },
   });
+  async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
+    setIsSubmitting(true);
+
+    try {
+        await createQuestions({})
+    }catch (e) {
+
+    }finally {
+        setIsSubmitting(false)
+    }
+  }
   const handleInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    field: any
+      e: React.KeyboardEvent<HTMLInputElement>,
+      field: any
   ) => {
     if (e.key === 'Enter' && field.name === 'tags') {
         e.preventDefault();
@@ -52,7 +63,7 @@ const Question = () => {
                 });
             }
         }
-
+        // Make sure the tag is not duplicated
         if (!field.value.includes(tagValue as never)) {
             form.setValue('tags', [...field.value, tagValue]);
             tagInput.value = '';
@@ -68,21 +79,10 @@ const Question = () => {
         const newTags = field.value.filter((t: string) => t !== tag);
         form.setValue('tags', newTags);
     }
-  async function onSubmit(values: z.infer<typeof QuestionsValid>) {
-    isSubmiting(true);
-
-    try {
-        await createQuestions({})
-    }catch (e) {
-
-    }finally {
-        isSubmiting(false)
-    }
-  }
   return (
     <div>
       <Form {...form} >
-        <form action={'fff'} onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form  onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="title"
@@ -111,42 +111,58 @@ const Question = () => {
             name="explanation"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col">
-                <FormLabel className="paragraph-semeibold text-dark-400_light800">
-                  explanation
-                </FormLabel>
+                  <FormLabel className="paragraph-semibold text-dark400_light800">
+                      Detailed explanation of your problem{" "}
+                      <span className="text-primary-500">*</span>
+                  </FormLabel>
                 <FormControl className="mt-3.5">
-                  <Editor
-                    apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY}
-                    onInit={(evt, editor) => {
-                      // @ts-ignore
-                      editorRef.current = editor;
-                    }}
-                    init={{
-                      height: 350,
-                      menubar: false,
+                    <Editor
+                        apiKey={process.env.NEXT_PUBLIC_TINY_API_KEY}
+                        onInit={(evt, editor) => {
+                            // @ts-ignore
+                            editorRef.current = editor;
+                        }}
+                        onBlur={field.onBlur}
+                        onEditorChange={(content) => field.onChange(content)}
+                        initialValue={""}
+                        init={{
+                            height: 350,
+                            menubar: false,
+                            plugins: [
+                                "advlist",
+                                "autolink",
+                                "lists",
+                                "link",
+                                "image",
+                                "charmap",
+                                "preview",
+                                "anchor",
+                                "searchreplace",
+                                "visualblocks",
+                                "codesample",
+                                "fullscreen",
+                                "insertdatetime",
+                                "media",
+                                "table",
+                            ],
+                            toolbar:
+                                "undo redo | " +
+                                "codesample | bold italic forecolor | alignleft aligncenter |" +
+                                "alignright alignjustify | bullist numlist",
+                            content_style: "body { font-family:Inter; font-size:16px }",
 
-                      content_style: 'body {font-size:20px;}',
-                      plugins:
-                        'ai   anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-                      toolbar:
-                        'undo codesample redo  fontsize | bold italic underline  | image    | align lineheight  | checklist numlist bullist',
 
-                      tinycomments_mode: 'embedded',
-                      tinycomments_author: 'Author name',
-                      mergetags_list: [
-                        { value: 'First.Name', title: 'First Name' },
-                        { value: 'Email', title: 'Email' },
-                      ],
-                      ai_request: (request, respondWith) =>
-                        respondWith.string(() =>
-                          // @ts-ignore
-                          Promise.reject('See docs to implement AI Assistant')
-                        ),
-                    }}
-                    initialValue=""
-                  />
+                        }}
+                    />
                 </FormControl>
-
+                  <FormDescription className="body-regular mt-2.5 text-light-500">
+                      Introduce the problem and expand on what you put in the title.
+                      Minimum 20 characters.
+                  </FormDescription>
+                  <FormMessage className="text-red-500" />
+              </FormItem>
+            )}
+          />
                 <FormField
                   control={form.control}
                   name="tags"
@@ -176,17 +192,14 @@ const Question = () => {
                     </FormItem>
                   )}
                 />
-              </FormItem>
-            )}
-          />
+
 
           <Button
             type="submit"
-            className="btn-secondary
-                    min-h-[41px] w-full rounded-lg px-4"
-            disabled={isSubmiting}
+            className="primary-gradient w-fit !text-light-900"
+            disabled={isSubmitting}
           >
-              {isSubmiting ? (
+              {isSubmitting ? (
                   <>
                       {type === 'edit' ?  'Editing...' : 'Posting...'}
                   </>
