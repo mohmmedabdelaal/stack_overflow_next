@@ -35,12 +35,13 @@ const Question = () => {
     },
   });
   async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
-    setIsSubmitting(true);
 
+      setIsSubmitting(true);
     try {
         await createQuestions({})
-    }catch (e) {
 
+    }catch (e) {
+        console.log(e.message);
     }finally {
         setIsSubmitting(false)
     }
@@ -51,7 +52,6 @@ const Question = () => {
   ) => {
     if (e.key === 'Enter' && field.name === 'tags') {
         e.preventDefault();
-
         const tagInput = e.target as HTMLInputElement;
         const tagValue = tagInput.value.trim();
 
@@ -86,7 +86,6 @@ const Question = () => {
           <FormField
             control={form.control}
             name="title"
-
             render={({ field }) => (
               <FormItem className="flex w-full flex-col">
                 <FormLabel className="paragraph-semeibold text-dark-400_light800">
@@ -192,22 +191,21 @@ const Question = () => {
                     </FormItem>
                   )}
                 />
-
-
           <Button
             type="submit"
             className="primary-gradient w-fit !text-light-900"
             disabled={isSubmitting}
           >
-              {isSubmitting ? (
-                  <>
-                      {type === 'edit' ?  'Editing...' : 'Posting...'}
-                  </>
-              ):(
-                  <>
-                      {type === 'edit' ? 'Edit question' : 'asking a question'}
-                  </>
-              )}
+              {/*{isSubmitting ? (*/}
+              {/*    <>*/}
+              {/*        {type === 'edit' ?  'Editing...' : 'Posting...'}*/}
+              {/*    </>*/}
+              {/*):(*/}
+              {/*    <>*/}
+              {/*        {type === 'edit' ? 'Edit question' : 'asking a question'}*/}
+              {/*    </>*/}
+              {/*)}*/}
+              Ask a question
           </Button>
         </form>
       </Form>
