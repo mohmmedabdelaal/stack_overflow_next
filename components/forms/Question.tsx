@@ -196,16 +196,16 @@ const Question = () => {
             className="primary-gradient w-fit !text-light-900"
             disabled={isSubmitting}
           >
-              {/*{isSubmitting ? (*/}
-              {/*    <>*/}
-              {/*        {type === 'edit' ?  'Editing...' : 'Posting...'}*/}
-              {/*    </>*/}
-              {/*):(*/}
-              {/*    <>*/}
-              {/*        {type === 'edit' ? 'Edit question' : 'asking a question'}*/}
-              {/*    </>*/}
-              {/*)}*/}
-              Ask a question
+              {isSubmitting ? (
+                  <>
+                      {type === 'edit' ?  'Editing...' : 'Posting...'}
+                  </>
+              ):(
+                  <>
+                      {type === 'edit' ? 'Edit question' : 'asking a question'}
+                  </>
+              )}
+
           </Button>
         </form>
       </Form>
