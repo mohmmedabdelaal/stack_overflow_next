@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button';
 import Filters from '@/components/shared/Filters';
 import { HomePageFilters } from '@/constants/fitlers';
 import HomeFilters from '@/components/home/HomeFilters';
-import questions from '@/lib/questions';
 import NoResults from '@/components/shared/NoResults';
 import QuestionCard from '@/components/card/QuestionCard';
+import { getQuestions } from '@/lib/actions/questions.actions';
 
-function Home() {
+export default async function Home() {
+  const result = await getQuestions({});
+  console.log(result.questions);
   return (
     <>
       <div
@@ -43,38 +45,25 @@ function Home() {
         />
       </div>
       <HomeFilters />
-      <div className="mt-5 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map(
-            ({
-              _id,
-              title,
-              author,
-              createdAt,
-              upvotes,
-              answers,
-              tags,
-              views,
-            }) => (
-              <QuestionCard
-                key={_id}
-                _id={_id}
-                title={title}
-                answers={answers}
-                author={author}
-                createdAt={createdAt}
-                tags={tags}
-                upvotes={upvotes}
-                views={views}
-              />
-            )
-          )
-        ) : (
-          <NoResults title="Not fount" description='Not found any answers or questions' linkTitle='ask a question' link='/ask-question'  />
-        )}
-      </div>
+        <div className="mt-5 flex w-full flex-col gap-6">
+            {result.questions.length > 0 ? (
+                result.questions.map((question) => (
+                    <QuestionCard
+                        key={question._id}
+                        _id={question._id}
+                        title={question.title}
+                        tags={question.tags}
+                        author={question.author}
+                        upvotes={question.upvotes}
+                        views={question.views}
+                        answers={question.answers}
+                        createdAt={question.createdAt}
+                    />
+                ))
+            ) : (
+                <div>No results now</div>
+            )}
+        </div>
     </>
   );
 }
-
-export default Home;

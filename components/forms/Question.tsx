@@ -1,10 +1,10 @@
 'use client';
 import React, { useRef,useState } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Editor } from '@tinymce/tinymce-react';
 import {
   Form,
   FormControl,
@@ -19,13 +19,18 @@ import { QuestionsSchema } from '@/lib/validations';
 import {Badge} from "@/components/ui/badge";
 import Image from "next/image";
 import {createQuestions} from "@/lib/actions/questions.actions";
+import {useRouter ,usePathname} from "next/navigation";
 
+interface Props {
+    mongodbUserId: string;
+}
 
 const type = 'create'
-const Question = () => {
+const Question = ({mongodbUserId} : Props) => {
     const [isSubmitting,setIsSubmitting] = useState(false)
-
     const editorRef = useRef(null);
+    const router = useRouter();
+    const pathName = usePathname();
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
@@ -38,8 +43,14 @@ const Question = () => {
 
       setIsSubmitting(true);
     try {
-        await createQuestions({})
-
+        await createQuestions({
+            title: values.title,
+            content: values.explanation,
+            tags: values.tags,
+            author: JSON.parse(mongodbUserId),
+            path: pathName
+        })
+    router.push('/')
     }catch (e) {
         console.log(e.message);
     }finally {
@@ -80,31 +91,31 @@ const Question = () => {
         form.setValue('tags', newTags);
     }
   return (
-    <div>
+
       <Form {...form} >
-        <form  onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem className="flex w-full flex-col">
-                <FormLabel className="paragraph-semeibold text-dark-400_light800">
-                  Title
-                </FormLabel>
-                <FormControl className="mt-3.5">
-                  <Input type={'text'}
-                    className="no-focus paragraph-regular background-light700_dark300 light-border-2 text-dark-300_light700 min-h-[60px] border"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription className="body-regular mt-2.5">
-                  Be specific and imagine you’re asking a question to another
-                  person.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form  onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-10 space-y-8">
+            <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                    <FormItem className="flex w-full flex-col">
+                        <FormLabel className="paragraph-semibold text-dark400_light800">
+                            Question Title <span className="text-primary-500">*</span>
+                        </FormLabel>
+                        <FormControl className="mt-3.5">
+                            <Input
+                                className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
+                                {...field}
+                            />
+                        </FormControl>
+                        <FormDescription className="body-regular mt-2.5 text-light-500">
+                            Be specific and imagine you&apos;re asking a question to another
+                            person.
+                        </FormDescription>
+                        <FormMessage className="text-red-500" />
+                    </FormItem>
+                )}
+            />
           <FormField
             control={form.control}
             name="explanation"
@@ -209,7 +220,7 @@ const Question = () => {
           </Button>
         </form>
       </Form>
-    </div>
+
   );
 };
 
