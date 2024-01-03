@@ -25,7 +25,7 @@ interface Props {
     mongodbUserId: string;
 }
 
-const type = 'create'
+// const type = 'create'
 const Question = ({mongodbUserId} : Props) => {
     const [isSubmitting,setIsSubmitting] = useState(false)
     const editorRef = useRef(null);
@@ -52,7 +52,7 @@ const Question = ({mongodbUserId} : Props) => {
         })
     router.push('/')
     }catch (e) {
-        console.log(e.message);
+        console.log(e);
     }finally {
         setIsSubmitting(false)
     }
@@ -207,15 +207,8 @@ const Question = ({mongodbUserId} : Props) => {
             className="primary-gradient w-fit !text-light-900"
             disabled={isSubmitting}
           >
-              {isSubmitting ? (
-                  <>
-                      {type === 'edit' ?  'Editing...' : 'Posting...'}
-                  </>
-              ):(
-                  <>
-                      {type === 'edit' ? 'Edit question' : 'asking a question'}
-                  </>
-              )}
+              Asking a Question
+
 
           </Button>
         </form>

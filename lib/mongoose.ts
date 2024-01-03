@@ -11,6 +11,7 @@ export async function connectToDatabase() {
   if(isConnected) return;
 
   try {
+    // @ts-ignore
     await  mongoose.connect(process.env.MONGODB_URL, {
       dbName: 'devoverflow'
     })

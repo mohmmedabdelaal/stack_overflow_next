@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import Filters from '@/components/shared/Filters';
 import { HomePageFilters } from '@/constants/fitlers';
 import HomeFilters from '@/components/home/HomeFilters';
-import NoResults from '@/components/shared/NoResults';
+
+// import NoResults from '@/components/shared/NoResults';
 import QuestionCard from '@/components/card/QuestionCard';
 import { getQuestions } from '@/lib/actions/questions.actions';
 

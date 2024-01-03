@@ -54,7 +54,9 @@ export async function POST(req: Request) {
     const eventType = evt.type;
 
    if(eventType === 'user.created'){
+       // @ts-ignore
        const {id,email_addresses, image_url,first_name,last_name,username} = evt.data;
+       // @ts-ignore
        const monogoUser = await createUser({
            clerkId:id,
            picture: image_url,
@@ -64,8 +66,11 @@ export async function POST(req: Request) {
        })
        return NextResponse.json({message: "ok", user: monogoUser})
    }
+
    if(eventType === 'user.updated'){
+       // @ts-ignore
        const {id,email_addresses, image_url,first_name,last_name,username} = evt.data;
+       // @ts-ignore
        const monogoUser = await updateUser({
            clerkId:id,
            updateData: {

@@ -2,14 +2,14 @@
 import { connectToDatabase } from '@/lib/mongoose';
 import Tag from '@/database/tag.model';
 import {
-  GetQuestionByIdParams,
+
   CreateQuestionParams,
 } from '@/lib/actions/shared.types';
 import User from '@/database/user.model';
 import Question from '@/database/question.model';
 import { revalidatePath } from 'next/cache';
 
-export async function getQuestions(params) {
+export async function getQuestions(params: any) {
   try {
     connectToDatabase();
 

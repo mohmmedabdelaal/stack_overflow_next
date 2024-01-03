@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import React from 'react';
 import RenderTags from '../shared/RenderTags';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { getTimestamp ,formatAndDivideNumber} from '@/lib/utils';
 import Metric from '@/components/shared/Metric';
-import {SignedIn} from "@clerk/nextjs";
+// import {SignedIn} from "@clerk/nextjs";
 
 interface QuestionProps {
   _id: string;
@@ -29,7 +29,7 @@ const QuestionCard = ({
   answers,
   createdAt,
 }: QuestionProps) => {
-  const showActionButtons = clerkId && clerkId === author.clerkId;
+  // const showActionButtons = clerkId && clerkId === author.clerkId;
 
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">

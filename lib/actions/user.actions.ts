@@ -1,5 +1,4 @@
 'use server'
-
 import {connectToDatabase} from "@/lib/mongoose";
 import User from "@/database/user.model";
 import {CreateUserParams, DeleteUserParams, UpdateUserParams} from "@/lib/actions/shared.types";
@@ -58,7 +57,7 @@ export async function deleteUser(params: DeleteUserParams){
 
         // delete user questions
         // @ts-ignore
-        await Question.deleteMany({author: user._id});
+        await QuestionModel.deleteMany({author: user._id});
 
         // @ts-ignore
         const deletedUser = await User.findByIdAndDelete(user._id);
