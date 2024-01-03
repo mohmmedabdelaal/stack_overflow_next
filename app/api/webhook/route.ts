@@ -55,6 +55,7 @@ export async function POST(req: Request) {
 
    if(eventType === 'user.created'){
        // @ts-ignore
+
        const {id,email_addresses, image_url,first_name,last_name,username} = evt.data;
        // @ts-ignore
        const monogoUser = await createUser({
