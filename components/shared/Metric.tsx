@@ -8,7 +8,7 @@ interface Props {
   title: string;
   alt: string;
   value: string | number;
-  isAuthor: boolean;
+  isAuthor?: boolean;
   textStyle?: string;
   href?: string;
 }

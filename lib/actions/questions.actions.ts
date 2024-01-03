@@ -9,7 +9,7 @@ import User from '@/database/user.model';
 import Question from '@/database/question.model';
 import { revalidatePath } from 'next/cache';
 
-export async function getQuestions(params: GetQuestionByIdParams) {
+export async function getQuestions(params) {
   try {
     connectToDatabase();
 
@@ -19,6 +19,7 @@ export async function getQuestions(params: GetQuestionByIdParams) {
     return { questions };
   } catch (e) {
     console.log(e);
+    throw e;
   }
 }
 export async function createQuestions(params: CreateQuestionParams) {
