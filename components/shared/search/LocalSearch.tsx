@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
   route: string;
@@ -10,6 +11,8 @@ interface Props {
   iconPlace: string;
   otherClasses: string;
 }
+const DEBOUNCE_MS = 300;
+
 
 const LocalSearch = ({
   route,
@@ -18,6 +21,13 @@ const LocalSearch = ({
   otherClasses,
   iconPlace,
 }: Props) => {
+  const router = useRouter()
+  const pathename = usePathname();
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get('q');
+  const [search, setSearch] = useState(query || "");
+
   return (
     <div
       className={`background-light800_darkgradient 
@@ -33,7 +43,7 @@ const LocalSearch = ({
           className="cursor-pointer"
         />
       )}
-      <Input type="text" placeholder={placeHolder} onChange={() => {}} />
+      <Input type="text" placeholder={placeHolder} onChange={(e) => setSearch(e.target.value)} className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"  />
       {iconPlace === 'right' && (
         <Image
           src={imgSrc}
