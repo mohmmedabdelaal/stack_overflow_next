@@ -68,7 +68,7 @@ const QuestionCard = ({
 
           <Metric
             imgUrl="/assets/icons/like.svg"
-            title=" Votes"
+            title="Votes"
             alt="upvotes"
             value={12}
             textStyle="small-medium text-dark400_light800"

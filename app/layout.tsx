@@ -1,8 +1,8 @@
-import React from 'react';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import Head from './head';
 import '../styles/globals.css';
+import '../styles/prism.css'
 import { ThemeProvider } from '@/context/ThemeProvider';
 import Navbar from '@/components/shared/navbar/Navbar';
 import Sidebar from '@/components/shared/sidebar/LeftSidebar';

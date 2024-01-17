@@ -1,7 +1,7 @@
 'use server'
 import {connectToDatabase} from "@/lib/mongoose";
 import User from "@/database/user.model";
-import {CreateUserParams, DeleteUserParams, UpdateUserParams} from "@/lib/actions/shared.types";
+import {CreateUserParams, DeleteUserParams, GetAllUsersParams, UpdateUserParams} from "@/lib/actions/shared.types";
 import {revalidatePath} from "next/cache";
 import QuestionModel from "@/database/question.model";
 
@@ -64,5 +64,17 @@ export async function deleteUser(params: DeleteUserParams){
         return deletedUser;
     }catch (e) {
 console.log(e)
+    }
+}
+
+export async function getAllUsers(params: GetAllUsersParams){
+    try {
+        connectToDatabase();
+        // const {page= 1, pageSize= 10, filter, searchQuery = ''} = params;
+       const user = await User.find({}).sort({createdAt: -1})
+        return {user};
+    }catch (e) {
+        console.log(e)
+        throw e;
     }
 }
