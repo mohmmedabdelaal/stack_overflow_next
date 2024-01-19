@@ -6,11 +6,6 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <Head />
       <body className="h-screen w-screen p-5">
-        <nav>
-          <ul>
-            <li>go home</li>
-          </ul>
-        </nav>
         {children}
       </body>
     </html>
