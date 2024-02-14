@@ -1,5 +1,5 @@
 'use server';
-import { connectToDatabase } from '@/lib/mongoose';
+import {connectToDatabase} from '@/lib/mongoose';
 import Tag from '@/database/tag.model';
 import {
   CreateQuestionParams,
@@ -11,7 +11,8 @@ import {
 } from '@/lib/actions/shared.types';
 import User from '@/database/user.model';
 import Question from '@/database/question.model';
-import { revalidatePath } from 'next/cache';
+import {revalidatePath} from 'next/cache';
+import {FilterQuery} from "mongoose";
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -35,25 +36,23 @@ export async function createQuestions(params: CreateQuestionParams) {
       content,
       author,
     });
-    const tagDocument = [];
+    const tagDocuments = [];
+
+    // Create the tags or get them if they already exist
     for (const tag of tags) {
-      const exitingTags = await Tag.findOneAndUpdate(
-        {
-          name: { $regex: new RegExp(`^${tag}$`, 'i') },
-        },
-        {
-          $setOnInsert: { name: tag },
-          $push: { question: question._id },
-        },
-        {
-          upsert: true,
-          new: true,
-        }
-      );
-      tagDocument.push(exitingTags._id);
+      // findOneAndUpdate() mongoose property
+      const existingTag = await Tag.findOneAndUpdate(
+          { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+          { $setOnInsert: { name: tag }, $push: { questions: question._id } },
+          { upsert: true, new: true }
+      )
+
+      tagDocuments.push(existingTag._id);
     }
+
+    // Mongoose property
     await Question.findByIdAndUpdate(question._id, {
-      $push: { tags: { $each: tagDocument } },
+      $push: { tags: { $each: tagDocuments }}
     });
 
     revalidatePath(path);
@@ -123,11 +122,11 @@ export async function downvoteQuestion(params: QuestionVoteParams){
   }
 }
 
-export async function saveQuestion(params: ToggleSaveQuestionParams) {
+export async function toggleSavedQuestions(params: ToggleSaveQuestionParams) {
     try {
       connectToDatabase();
     const {userId,questionId,path} = params;
-      const user = await User.findById({clerkId: userId})
+      const user = await User.findById(userId)
       const isSavedQuestion = user.saved.includes(questionId);
 
       let updatedUser;
@@ -146,4 +145,26 @@ export async function saveQuestion(params: ToggleSaveQuestionParams) {
       console.log(e);
       throw  e;
     }
+}
+
+export async function getAllSavedQuestions(params: GetSavedQuestionsParams){
+  try {
+    connectToDatabase();
+    const {clerkId,page=1,pageSize=10, filter, searchQuery} = params;
+const query:FilterQuery<typeof Question> = searchQuery ? {title: {$regex: new RegExp(searchQuery,'i')}} : {}
+    const user = await User.findOne({clerkId}).populate({path: 'saved',
+    match: query,
+      options: {sort: {createdAt: -1}},
+      populate: [
+        {path: 'tags', model:Tag,select: '_id name'},
+        {path: 'author',model: User, select: 'clerkId _id name picture'}
+      ]
+    });
+
+  const savedQuestions =  user.saved;
+  return {questions: savedQuestions};
+  }catch (e) {
+    console.log(e)
+    throw e;
+  }
 }

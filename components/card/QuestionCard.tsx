@@ -70,7 +70,7 @@ const QuestionCard = ({
             imgUrl="/assets/icons/like.svg"
             title="Votes"
             alt="upvotes"
-            value={12}
+            value={formatAndDivideNumber(upvotes.length)}
             textStyle="small-medium text-dark400_light800"
           />
           </div>
