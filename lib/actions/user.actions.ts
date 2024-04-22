@@ -10,6 +10,8 @@ import {
 } from "@/lib/actions/shared.types";
 import {revalidatePath} from "next/cache";
 import QuestionModel from "@/database/question.model";
+import Question from "@/database/question.model";
+import Answer from "@/database/Answer.model";
 
 export async function getUserById(params: any) {
 
@@ -93,23 +95,48 @@ export async function getUserInfo(params: GetUserByIdParams) {
         const user = await User.findOne({clerkId: userId})
 
         if (!user) {
-            throw new Error('User not found');
+            throw new Error('User not found')
         }
 
-        const userInfo = {
-            clerkId: user.clerkId,
-            name: user.name,
-            username: user.username,
-            email: user.email,
-            bio: user.bio,
-            picture: user.picture,
-            location: user.location,
-            portfolioWebsite: user.portfolioWebsite,
+        const totalQuestions = await Question.countDocuments({author: user._id})
+        const totalAnswers = await Answer.countDocuments({author: user._id})
+
+        const [questionUpvotes] = await Question.aggregate([
+            {$match: {author: user._id}},
+            {
+                $project: {
+                    _id: 0, upvotes: {$size: '$upvotes'}
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalUpvotes: {$sum: '$upvotes'}
+                }
+            }
+        ])
+        const [answersUpvotes] = await Answer.aggregate(
+            [
+                {$match: {author: user._id}},
+                {
+                    $project: {
+                        _id: 0, upvotes: {$size: "$upvotes"}
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalViews: {$sum: '$views'}
+                    }
+                }
+            ]
+        )
+        return {
+            user,
+            totalQuestions,
+            totalAnswers,
             reputation: user.reputation,
-            joinedAt: user.joinedAt,
-            savedQuestions: user.savedQuestions
         }
-        return userInfo;
     } catch (e) {
         console.log(e)
         throw e;
