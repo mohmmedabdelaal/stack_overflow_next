@@ -43,5 +43,18 @@ export interface BadgeCounts {
   SILVER: number;
   BRONZE: number;
 }
+// app/types/types.ts
+export interface PostType {
+  _id: string;
+  title?: string; // Question-specific
+  content?: string; // Answer-specific
+  author: {
+    _id: string;
+    clerkId: string;
+    name: string;
+    picture: string;
+  };
+  // ... add other common fields like createdAt, upvotes, etc.
+}
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;

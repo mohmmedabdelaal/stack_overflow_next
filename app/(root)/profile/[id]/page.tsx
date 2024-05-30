@@ -8,17 +8,25 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProfileLink from '@/components/shared/ProfileLink';
+import Stats from '@/components/shared/Stats';
+import AnswerTab from '@/components/shared/AnswerTab';
+import QuestionTab from '@/components/shared/QuestionTab';
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const { id } = params;
   const userInfo = await getUserInfo({ userId: id });
+  const isCurrentUser = clerkId === userInfo.user.clerkId;
+  if (!userInfo?.user) {
+    // Handle case where user is not found (e.g., display an error message)
+    return <div>User not found</div>;
+  }
 
   return (
-    <>
+    <div className="container py-12">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row ">
-        <div className="flex flex-col items-start gap-4 lg:flex-grow">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="flex flex-col items-start gap-4 lg:grow">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div className="card">
               <h3 className="text-xl font-bold">Questions</h3>
               <p className="text-2xl">{userInfo.user.questions}</p>
@@ -76,29 +84,41 @@ const Page = async ({ params, searchParams }: URLProps) => {
           )}
         </div>
       </div>
-      <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3 mt-3">
+      <div className="mt-3 flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
         <SignedIn>
-          {clerkId === userInfo.user.clerkId && (
+          {isCurrentUser && (
             <Link href="/profile/edit">
-              <Button className="paragraph-meduim btn-secondary text-dark300_light900 hover:bg-blue-700 font-bold py-2 px-4 rounded">
+              <Button className="paragraph-meduim btn-secondary text-dark300_light900 rounded px-4 py-2 font-bold hover:bg-blue-700">
                 Edit Profile
               </Button>
             </Link>
           )}
         </SignedIn>
       </div>
-      stats
-      <div className="flex mt-16 gap-10">
+      <Stats
+        totalAnswers={userInfo.totalAnswers}
+        totalQuestions={userInfo.totalQuestions}
+        reputation={userInfo.reputation}
+        badges={{}}
+      />
+      <div className="mt-16 flex gap-10">
         <Tabs defaultValue="top-posts" className="w-[400px]">
           <TabsList>
-            <TabsTrigger value="top-posts">Top posts</TabsTrigger>
+            <TabsTrigger value="top-posts">Top Posts</TabsTrigger>
             <TabsTrigger value="answers">Answers</TabsTrigger>
           </TabsList>
-          <TabsContent value="top-posts">POSTS</TabsContent>
-          <TabsContent value="answers">ANSWERS</TabsContent>
+          <TabsContent value="top-posts">
+            <QuestionTab
+              questions={userInfo.user?.questions || []}
+              isLoading={false}
+            />
+          </TabsContent>
+          <TabsContent value="answers">
+            {/* <AnswerTab answers={userInfo.user.answers} isLoading={userInfo.isLoading}/> */}
+          </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 };
 
