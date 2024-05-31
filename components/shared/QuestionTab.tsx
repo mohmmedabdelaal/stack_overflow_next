@@ -1,35 +1,26 @@
 // components/shared/QuestionTab.tsx
-import React from 'react';
-import { PostType } from '@/types';
+import { getUserQuestions } from '@/lib/actions/user.actions';
 import Link from 'next/link';
+import QuestionCard from '../card/QuestionCard';
 
-interface QuestionTabProps {
-  questions: PostType[];
-  isLoading?: boolean;
-}
-
-const QuestionTab: React.FC<QuestionTabProps> = ({
-  questions,
-  isLoading = false,
-}) => {
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!questions || questions.length === 0) {
-    // Check if questions is undefined or empty
-    return <div>No questions found.</div>;
-  }
-
+const QuestionTab = async ({ searchParams, userId, clerkId }) => {
+  const { questions } = await getUserQuestions({ userId });
+  console.log('her :' + questions);
   return (
     <div className="mt-8 space-y-6">
       {questions.map((question) => (
-        <div key={question._id} className="border rounded-md p-4">
-          {/* Render the content of each question */}
-          <h2>{question.title}</h2>
-          {/* You can add more details like tags, upvotes, etc. */}
-          <Link href={`/question/${question._id}`}>View Question</Link>
-        </div>
+        <QuestionCard
+          key={question._id}
+          _id={question._id}
+          title={question.title}
+          author={question.author}
+          clerkId={clerkId}
+          tags={question.tags}
+          views={question.views}
+          upvotes={question.upvotes}
+          createdAt={question.createdAt}
+          answers={question.answers}
+        />
       ))}
     </div>
   );

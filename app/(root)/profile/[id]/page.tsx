@@ -16,6 +16,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const { id } = params;
   const userInfo = await getUserInfo({ userId: id });
+
   const isCurrentUser = clerkId === userInfo.user.clerkId;
   if (!userInfo?.user) {
     // Handle case where user is not found (e.g., display an error message)
@@ -53,7 +54,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
               {userInfo.user.name}
             </h2>
             <p className="paragraph-regular text-dark200_light900">
-              {userInfo.user.username}
+              @{userInfo.user.username}
             </p>
           </div>
           <div className="mt-5 flex flex-wrap items-center justify-start gap-2">
@@ -109,8 +110,9 @@ const Page = async ({ params, searchParams }: URLProps) => {
           </TabsList>
           <TabsContent value="top-posts">
             <QuestionTab
-              questions={userInfo.user?.questions || []}
-              isLoading={false}
+              searchParams={searchParams}
+              userId={userInfo.user._id}
+              clerkId={clerkId}
             />
           </TabsContent>
           <TabsContent value="answers">
