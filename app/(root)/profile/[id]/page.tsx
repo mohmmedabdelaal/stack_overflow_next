@@ -116,7 +116,11 @@ const Page = async ({ params, searchParams }: URLProps) => {
             />
           </TabsContent>
           <TabsContent value="answers">
-            {/* <AnswerTab answers={userInfo.user.answers} isLoading={userInfo.isLoading}/> */}
+            <AnswerTab
+              userId={userInfo.user._id}
+              clerkId={clerkId}
+              searchParams={searchParams}
+            />
           </TabsContent>
         </Tabs>
       </div>

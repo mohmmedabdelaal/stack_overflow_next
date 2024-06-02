@@ -94,6 +94,35 @@ export async function getUserQuestions(params: GetUserStatsParams) {
     throw error;
   }
 }
+
+export async function getUserAnswers(params: GetUserStatsParams) {
+  try {
+    connectToDatabase();
+    const { userId } = params;
+    const totalAnswers = await Answer.countDocuments({ author: userId });
+    const userAnswers = await Answer.find({ author: userId })
+      .sort({ createdAt: -1 }) // Sort by creation date descending
+      .populate({
+        path: 'question', // Populate the question reference
+        model: Question,
+        populate: {
+          path: 'tags', // Further populate tags within the question
+          model: Tag,
+          select: '_id name',
+        },
+      })
+      .populate({
+        path: 'author', // Populate the author reference
+        model: User,
+        select: '_id clerkId name picture',
+      });
+
+    return { totalAnswers, answers: userAnswers };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
