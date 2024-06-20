@@ -88,7 +88,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
       <div className="mt-3 flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
         <SignedIn>
           {isCurrentUser && (
-            <Link href="/profile/edit">
+            <Link href={`/profile/edit/${id}`}>
               <Button className="paragraph-meduim btn-secondary text-dark300_light900 rounded px-4 py-2 font-bold hover:bg-blue-700">
                 Edit Profile
               </Button>

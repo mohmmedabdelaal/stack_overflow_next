@@ -31,7 +31,7 @@ interface Props {
 }
 
 // const type = 'create'
-const Question = ({ mongodbUserId, type = 'create', results }: Props) => {
+const Question = ({ mongodbUserId, type, results }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
   const router = useRouter();
@@ -44,8 +44,8 @@ const Question = ({ mongodbUserId, type = 'create', results }: Props) => {
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),
     defaultValues: {
-      title: parsedResults.title || '',
-      explanation: parsedResults.content || '',
+      title: parsedResults?.title || '',
+      explanation: parsedResults?.content || '',
       tags: allTags || [],
     },
   });
@@ -153,7 +153,7 @@ const Question = ({ mongodbUserId, type = 'create', results }: Props) => {
                   }}
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue={parsedResults.content || ''}
+                  initialValue={parsedResults?.content || ''}
                   init={{
                     height: 350,
                     menubar: false,

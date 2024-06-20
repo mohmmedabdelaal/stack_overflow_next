@@ -242,3 +242,26 @@ export async function updateQuestion(params: EditQuestionParams) {
     console.log(error);
   }
 }
+
+export async function getHotQuestions() {
+  try {
+    connectToDatabase();
+    const questions = await Question.find({})
+      .sort({ views: -1 }) // Sort by views in descending order
+      .limit(5) // Limit to top 5 questions
+      .populate({
+        path: 'tags',
+        model: Tag,
+        select: '_id name', // Select only _id and name fields for tags
+      })
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id clerkId name picture', // Select only _id, clerkId, name, and picture fields for the author
+      });
+
+    return questions;
+  } catch (error) {
+    console.log(error);
+  }
+}
