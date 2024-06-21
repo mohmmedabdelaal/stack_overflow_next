@@ -1,8 +1,8 @@
 'use client';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
   route: string;
@@ -13,7 +13,6 @@ interface Props {
 }
 const DEBOUNCE_MS = 300;
 
-
 const LocalSearch = ({
   route,
   placeHolder,
@@ -21,12 +20,21 @@ const LocalSearch = ({
   otherClasses,
   iconPlace,
 }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const pathename = usePathname();
   const searchParams = useSearchParams();
 
   const query = searchParams.get('q');
-  const [search, setSearch] = useState(query || "");
+  const [search, setSearch] = useState(query || '');
+  const handleSearch = () => {
+    if (search) return router.push(`/?q=${search}`);
+    if (!search) return router.push('/');
+  };
+  console.log(query);
+
+  const handleKeyDown = (event: { key: any }) => {
+    if (event.key === 'Enter') return handleSearch();
+  };
 
   return (
     <div
@@ -43,7 +51,14 @@ const LocalSearch = ({
           className="cursor-pointer"
         />
       )}
-      <Input type="text" placeholder={placeHolder} onChange={(e) => setSearch(e.target.value)} className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"  />
+      <Input
+        type="text"
+        placeholder={placeHolder}
+        onChange={(e) => setSearch(e.target.value)}
+        value={search ?? ''}
+        onKeyDown={handleKeyDown}
+        className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"
+      />
       {iconPlace === 'right' && (
         <Image
           src={imgSrc}

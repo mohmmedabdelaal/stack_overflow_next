@@ -86,7 +86,7 @@ const LeftSidebar = () => {
           </SignedOut>
           <SignedIn>
             <Button
-              className="small-medium btn-secondary
+              className="small-medium btn-primary
                     min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"
               onClick={handleLogout}
             >
