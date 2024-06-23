@@ -13,7 +13,10 @@ import { SearchPramsProps } from '@/types';
 
 export default async function Home({ searchParams }: SearchPramsProps) {
   const { userId: clerkId } = auth();
-  const result = await getQuestions({ searchQuery: searchParams.q });
+  const result = await getQuestions({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
 
   return (
     <>

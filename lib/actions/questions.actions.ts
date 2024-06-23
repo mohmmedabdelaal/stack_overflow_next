@@ -21,22 +21,41 @@ import Interaction from '@/database/interaction.model';
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
-    const query: FilterQuery<typeof Question> = {};
-    const searchRegQuery = new RegExp(searchQuery, 'i');
+    // const query: FilterQuery<typeof Question> = {};
+
+    // ... (Create text index if not exists) ...
+
+    const regexQuery = { $regex: new RegExp(searchQuery, 'i') };
+
+    const filterConditions = [];
 
     if (searchQuery) {
-      query.$or = [
-        { title: { $regex: searchRegQuery } },
-        { content: { $regex: searchRegQuery } },
-      ];
+      filterConditions.push({
+        $or: [{ title: regexQuery }, { content: regexQuery }],
+      });
     }
 
-    const questions = await Question.find(query)
+    if (filter) {
+      if (filter === 'newest') {
+        filterConditions.push({
+          createdAt: {
+            $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
+          },
+        });
+      } else if (filter === 'unanswered') {
+        filterConditions.push({ answers: { $size: 0 } });
+      }
+    }
+
+    const finalQuery =
+      filterConditions.length > 0 ? { $and: filterConditions } : {};
+
+    const questions = await Question.find(finalQuery)
+      .sort({ createdAt: -1, views: -1 })
       .populate({ path: 'tags', model: Tag })
-      .populate({ path: 'author', model: User })
-      .sort({ createdAt: -1 });
+      .populate({ path: 'author', model: User });
     return { questions };
   } catch (e) {
     console.log(e);

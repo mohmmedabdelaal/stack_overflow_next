@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -8,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { fromUrlQuery } from '@/lib/utils';
 
 interface Filter {
   name: string;
@@ -18,38 +20,45 @@ interface Props {
   filters: Filter[];
   otherClasses?: string;
   containerClasses?: string;
-  selectedFilter?: string; // New prop to track selected filter
-  onChange?: (value: string) => void; // Function to handle filter change
 }
 
-const Filters = ({
-  filters,
-  otherClasses,
-  containerClasses,
-  selectedFilter,
-  onChange,
-}: Props) => {
+const Filters = ({ filters, otherClasses, containerClasses }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [filterUpdate, setFilterUpdate] = useState(
+    searchParams.get('filter') ?? filters[0].value
+  );
+
+  const handleUpdateParams = (value: string) => {
+    setFilterUpdate(value);
+    const newSearchParams = fromUrlQuery({
+      params: searchParams.toString(),
+      key: 'filter',
+      value,
+    });
+    router.push(`/?${newSearchParams.toString()}`);
+  };
+
   return (
     <div className={`relative ${containerClasses}`}>
-      <Select onValueChange={onChange} defaultValue={selectedFilter}>
+      <Select
+        onValueChange={handleUpdateParams}
+        defaultValue={filterUpdate || undefined}
+      >
         <SelectTrigger
-          className={`${otherClasses} body-regular light-border background-light800_dark300 text-dark-500_light700 border px-5 py-2.5`}
+          className={`${otherClasses} body-regular light-border background-light800_dark300 text-dark500_light700 border px-5 py-2.5`}
         >
-          <div className="ling-clamp-1 flex-1 text-left">
+          <div className="line-clamp-1 flex-1 text-left">
             <SelectValue placeholder="Select a Filter" />
           </div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="text-dark500_light700 small-regular border-none bg-light-900 dark:bg-dark-300">
           <SelectGroup>
             {filters.map((item) => (
               <SelectItem
                 key={item.value}
                 value={item.value}
-                className={`${
-                  item.value === selectedFilter
-                    ? 'bg-primary text-primary-foreground'
-                    : ''
-                }`} // Conditional styling
+                className="cursor-pointer focus:bg-light-800 dark:focus:bg-dark-400"
               >
                 {item.name}
               </SelectItem>

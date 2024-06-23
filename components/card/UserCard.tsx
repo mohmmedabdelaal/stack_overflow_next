@@ -22,27 +22,9 @@ const UserCard = async ({ user, variant = 'default' }: UserProps) => {
   return (
     <Link
       href={`/profile/${user.clerkId}`}
-      className={`
-        mb-2 mt-4 w-full max-xs:min-w-full xs:w-[260px] 
-        ${
-          variant === 'default'
-            ? 'shadow-light100_dark'
-            : 'shadow-none mb-0 mt-0'
-        }
-      `}
+      className="shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px]"
     >
-      <article
-        className={`
-          flex flex-col items-center rounded-lg bg-white 
-          ${
-            variant === 'default'
-              ? 'border border-gray-200 shadow hover:bg-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 md:max-w-xl md:flex-row'
-              : ''
-          }
-        `}
-      >
-        {/* Image */}
-        {/* Adjust image size based on variant */}
+      <article className="background-light900_dark200 light-border flex w-full flex-col items-center justify-center rounded-2xl border p-8">
         <div
           className={`
             relative aspect-square h-48 w-48 overflow-hidden rounded-t-lg 
@@ -79,7 +61,7 @@ const UserCard = async ({ user, variant = 'default' }: UserProps) => {
             {user.name}
           </h5>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            {user.username}
+            @{user.username}
           </p>
           <div className="mt-1.5 flex flex-wrap gap-2">
             {interactedTags.length > 0 ? (

@@ -30,7 +30,7 @@ const Page = async ({ searchParams }: SearchPramsProps) => {
           // selectedFilter={selectedFilter}
         />
       </div>
-      <div className="space-y-4">
+      <section className="mt-12 flex flex-wrap gap-4">
         {results.users.length > 0 ? (
           results.users.map((user) => (
             <UserCard key={user._id} user={user} variant="compact" />
@@ -43,7 +43,7 @@ const Page = async ({ searchParams }: SearchPramsProps) => {
             description="Try to connect with more profiles"
           />
         )}
-      </div>
+      </section>
     </>
   );
 };
