@@ -1,9 +1,10 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 
 const GlobalSearch = () => {
+  const [search, setSearch] = useState('');
   return (
     <div className="relative w-full max-w-[600px] max-lg:hidden">
       <div
@@ -19,9 +20,11 @@ const GlobalSearch = () => {
         />
         <Input
           type="text"
-          placeholder="Search for job..."
-          value=""
-          onChange={() => {}}
+          placeholder="Search here"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
           className="paragraph-regular no-focus placeholder 
           background-light800_darkgradient border-none shadow-none"
         />

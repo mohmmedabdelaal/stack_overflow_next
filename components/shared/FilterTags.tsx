@@ -1,15 +1,8 @@
-'use client';
-import React from 'react';
+import { getPopularTags } from '@/lib/actions/tag.action';
 import RenderTags from './RenderTags';
 
-const FilterTags = () => {
-  const popularTags = [
-    { _id: '1', name: 'javascript', totalQuestions: 15 },
-    { _id: '2', name: 'react', totalQuestions: 50 },
-    { _id: '3', name: 'next', totalQuestions: 45 },
-    { _id: '4', name: 'vue', totalQuestions: 25 },
-    { _id: '5', name: 'redux', totalQuestions: 5 },
-  ];
+const FilterTags = async () => {
+  const popularTags = await getPopularTags();
   return (
     <div>
       {popularTags.map((tag) => (

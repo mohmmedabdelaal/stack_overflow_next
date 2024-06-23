@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { fromUrlQuery, removeKeysFromQuery } from '@/lib/utils';
 
 interface Props {
   route: string;
@@ -26,16 +27,27 @@ const LocalSearch = ({
 
   const query = searchParams.get('q');
   const [search, setSearch] = useState(query || '');
-  const handleSearch = () => {
-    if (search) return router.push(`/?q=${search}`);
-    if (!search) return router.push('/');
-  };
-  console.log(query);
-
-  const handleKeyDown = (event: { key: any }) => {
-    if (event.key === 'Enter') return handleSearch();
-  };
-
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (search) {
+        const fromUrl = fromUrlQuery({
+          params: searchParams.toString(),
+          key: 'q',
+          value: search,
+        });
+        router.push(fromUrl, { scroll: false });
+      } else {
+        if (route === pathename) {
+          const removeUrl = removeKeysFromQuery({
+            params: searchParams.toString(),
+            keysToRemove: ['q'],
+          });
+          router.push(removeUrl, { scroll: false });
+        }
+      }
+      return () => clearTimeout(delayDebounce);
+    }, DEBOUNCE_MS);
+  }, [router, route, search, searchParams, query]);
   return (
     <div
       className={`background-light800_darkgradient 
@@ -55,8 +67,7 @@ const LocalSearch = ({
         type="text"
         placeholder={placeHolder}
         onChange={(e) => setSearch(e.target.value)}
-        value={search ?? ''}
-        onKeyDown={handleKeyDown}
+        value={search}
         className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent shadow-none outline-none"
       />
       {iconPlace === 'right' && (

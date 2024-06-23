@@ -13,6 +13,7 @@ import { revalidatePath } from 'next/cache';
 import Question from '@/database/question.model';
 import Answer from '@/database/Answer.model';
 import Tag from '@/database/tag.model';
+import { FilterQuery } from 'mongoose';
 
 export async function getUserById(params: any) {
   try {
@@ -126,9 +127,19 @@ export async function getUserAnswers(params: GetUserStatsParams) {
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
-    // const {page= 1, pageSize= 10, filter, searchQuery = ''} = params;
-    const user = await User.find({}).sort({ createdAt: -1 });
-    return { user };
+    const { page = 1, pageSize = 10, searchQuery } = params;
+
+    const query: FilterQuery<typeof User> = {};
+    const searchRegQuery = new RegExp(searchQuery, 'i');
+
+    if (searchQuery) {
+      query.$or = [
+        { name: { $regex: searchRegQuery } },
+        { username: { $regex: searchRegQuery } },
+      ];
+    }
+    const users = await User.find(query).sort({ createdAt: -1 });
+    return { users };
   } catch (e) {
     console.log(e);
     throw e;

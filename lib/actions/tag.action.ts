@@ -10,7 +10,7 @@ import Tag, { ITag } from '@/database/tag.model';
 import Question from '@/database/question.model';
 import User from '@/database/user.model';
 import { getQuestionById } from '@/lib/actions/questions.actions';
-import { FilterQuery } from 'mongoose';
+import { _FilterQuery, FilterQuery } from 'mongoose';
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -31,7 +31,15 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
 export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDatabase();
-    const tags = await Tag.find({});
+    const { searchQuery } = params;
+
+    const query: FilterQuery<typeof Tag> = {};
+    const searchRegQuery = new RegExp(searchQuery, 'i');
+
+    if (searchQuery) {
+      query.$or = [{ name: { $regex: searchRegQuery } }];
+    }
+    const tags = await Tag.find(query);
     return { tags };
   } catch (e) {
     console.log(e);

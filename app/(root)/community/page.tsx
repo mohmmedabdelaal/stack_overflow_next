@@ -4,17 +4,18 @@ import Filters from '@/components/shared/Filters';
 import { UserFilters } from '@/constants/fitlers';
 import UserCard from '@/components/card/UserCard';
 import { getAllUsers } from '@/lib/actions/user.actions';
-import { Badge } from '@/components/ui/badge';
+import { SearchPramsProps } from '@/types';
+import NoResults from '@/components/shared/NoResults';
 
-const Page = async () => {
-  const results = await getAllUsers({});
+const Page = async ({ searchParams }: SearchPramsProps) => {
+  const results = await getAllUsers({ searchQuery: searchParams.q });
 
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>
       <div
         className="mt-11 flex justify-between gap-5
-       max-sm:flex-col sm:items-center"
+              max-sm:flex-col sm:items-center"
       >
         <LocalSearch
           imgSrc="/assets/icons/search.svg"
@@ -26,15 +27,21 @@ const Page = async () => {
         <Filters
           filters={UserFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
+          // selectedFilter={selectedFilter}
         />
       </div>
-      <div className="mt-3.5 pt-2">
-        {results.user.length > 0 ? (
-          results.user.map((users) => <UserCard key={users._id} user={users} />)
+      <div className="space-y-4">
+        {results.users.length > 0 ? (
+          results.users.map((user) => (
+            <UserCard key={user._id} user={user} variant="compact" />
+          ))
         ) : (
-          <Badge>
-            <h1> No Users yet...</h1>
-          </Badge>
+          <NoResults
+            title="No users available now"
+            link="/profile"
+            linkTitle="Users not found"
+            description="Try to connect with more profiles"
+          />
         )}
       </div>
     </>
