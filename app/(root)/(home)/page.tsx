@@ -10,12 +10,14 @@ import QuestionCard from '@/components/card/QuestionCard';
 import { getQuestions } from '@/lib/actions/questions.actions';
 import { auth } from '@clerk/nextjs';
 import { SearchPramsProps } from '@/types';
+import Pagination from '@/components/shared/Paginations';
 
 export default async function Home({ searchParams }: SearchPramsProps) {
   const { userId: clerkId } = auth();
-  const result = await getQuestions({
+  const { questions, isNext } = await getQuestions({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -53,8 +55,8 @@ export default async function Home({ searchParams }: SearchPramsProps) {
       </div>
       <HomeFilters />
       <div className="mt-5 flex w-full flex-col gap-6">
-        {result.questions.length > 0 ? (
-          result.questions.map((question) => (
+        {questions.length > 0 ? (
+          questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
@@ -76,6 +78,14 @@ export default async function Home({ searchParams }: SearchPramsProps) {
             description="Ask question to gain more knowledge"
           />
         )}
+      </div>
+      <div>
+        <div className="mt-10">
+          <Pagination
+            isNext={isNext}
+            pageNumber={searchParams?.page ? +searchParams.page : 1}
+          />
+        </div>
       </div>
     </>
   );

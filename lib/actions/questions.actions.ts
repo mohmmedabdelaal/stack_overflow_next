@@ -23,6 +23,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     connectToDatabase();
     const { pageSize = 10, page = 1, searchQuery, filter } = params;
 
+    const skipAmount = (page - 1) * pageSize;
     const regexQuery = { $regex: new RegExp(searchQuery, 'i') };
 
     const query: FilterQuery<typeof Question> = {};
@@ -53,7 +54,8 @@ export async function getQuestions(params: GetQuestionsParams) {
       .sort(sortOptions)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User });
-    return { questions };
+    const isNext = totalQuestions > skipAmount + questions.length;
+    return { questions, isNext };
   } catch (e) {
     console.log(e);
     throw e;
