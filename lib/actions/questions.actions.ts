@@ -21,39 +21,36 @@ import Interaction from '@/database/interaction.model';
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery, filter } = params;
-
-    // const query: FilterQuery<typeof Question> = {};
-
-    // ... (Create text index if not exists) ...
+    const { pageSize = 10, page = 1, searchQuery, filter } = params;
 
     const regexQuery = { $regex: new RegExp(searchQuery, 'i') };
 
-    const filterConditions = [];
+    const query: FilterQuery<typeof Question> = {};
 
     if (searchQuery) {
-      filterConditions.push({
-        $or: [{ title: regexQuery }, { content: regexQuery }],
-      });
+      query.$or = [{ title: regexQuery }, { content: regexQuery }];
     }
 
-    if (filter) {
-      if (filter === 'newest') {
-        filterConditions.push({
-          createdAt: {
-            $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
-          },
-        });
-      } else if (filter === 'unanswered') {
-        filterConditions.push({ answers: { $size: 0 } });
-      }
+    let sortOptions = {};
+
+    switch (filter) {
+      case 'newest':
+        sortOptions = { createdAt: -1 };
+        break;
+      case 'frequent':
+        sortOptions = { views: -1 };
+        break;
+      case 'unanswered':
+        query.answers = { $size: 0 };
+        break;
+      default:
+        break;
     }
 
-    const finalQuery =
-      filterConditions.length > 0 ? { $and: filterConditions } : {};
+    const totalQuestions = await Question.countDocuments(query);
 
-    const questions = await Question.find(finalQuery)
-      .sort({ createdAt: -1, views: -1 })
+    const questions = await Question.find(query)
+      .sort(sortOptions)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User });
     return { questions };

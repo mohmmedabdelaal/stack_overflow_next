@@ -36,7 +36,7 @@ const Filters = ({ filters, otherClasses, containerClasses }: Props) => {
       key: 'filter',
       value,
     });
-    router.push(`/?${newSearchParams.toString()}`);
+    router.push(newSearchParams, { scroll: false });
   };
 
   return (

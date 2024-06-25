@@ -3,13 +3,15 @@ import Filters from '@/components/shared/Filters';
 import { TagFilters } from '@/constants/fitlers';
 import { getAllTags } from '@/lib/actions/tag.action';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import { SearchPramsProps } from '@/types';
 import NoResults from '@/components/shared/NoResults';
 // import {Badge} from "@/components/ui/badge";
 
 const Page = async ({ searchParams }: SearchPramsProps) => {
-  const results = await getAllTags({ searchQuery: searchParams.q });
+  const results = await getAllTags({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
 
   return (
     <>

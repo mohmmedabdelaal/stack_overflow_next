@@ -8,7 +8,10 @@ import { SearchPramsProps } from '@/types';
 import NoResults from '@/components/shared/NoResults';
 
 const Page = async ({ searchParams }: SearchPramsProps) => {
-  const results = await getAllUsers({ searchQuery: searchParams.q });
+  const results = await getAllUsers({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+  });
 
   return (
     <>
