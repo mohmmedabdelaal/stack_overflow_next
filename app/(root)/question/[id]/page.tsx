@@ -26,8 +26,8 @@ const Page = async ({ params }: any) => {
   console.log(result.answers);
   return (
     <>
-      <div className="flex w-full flex-col items-start gap-2">
-        <div className="flex w-full flex-col-reverse justify-between gap-5">
+      <div className="text-dark500_light700 flex w-full flex-col items-start gap-2">
+        <div className="text-dark500_light700 flex w-full flex-col-reverse justify-between gap-5">
           <Link
             href={`/profile/${result.author.clerkId}`}
             className="flex items-center justify-start gap-5"
@@ -56,12 +56,12 @@ const Page = async ({ params }: any) => {
             />
           </div>
         </div>
-        <div className="flex items-start">
+        <div className="text-dark500_light700 flex items-start">
           <h1 className="h2-semibold text-dark-200_light800 mt-3.5 w-full text-left">
             {title}
           </h1>
         </div>
-        <div className="mb-2.5 flex justify-between gap-4">
+        <div className="text-dark500_light700 mb-2.5 flex justify-between gap-4">
           <Metric
             imgUrl="/assets/icons/clock.svg"
             alt="upvotes"

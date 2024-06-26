@@ -86,16 +86,18 @@ const LeftSidebar = () => {
           </SignedOut>
           <SignedIn>
             <Button
-              className="small-medium btn-primary
-                    min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"
+              className="small-medium btn-secondary min-h-[41px] w-full rounded-lg
+                     px-4 py-3 text-dark-300 shadow-none"
               onClick={handleLogout}
             >
               <Image
                 src="/assets/icons/account.svg"
                 width={20}
                 height={20}
+                className=""
                 alt="Sign-out"
               />
+
               <span className="primary-text-gradient max-lg:hidden">
                 Log out
               </span>

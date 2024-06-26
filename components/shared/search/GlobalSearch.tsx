@@ -4,34 +4,35 @@ import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { fromUrlQuery, removeKeysFromQuery } from '@/lib/utils';
+import GlobalResults from './GlobalResults';
 
 const GlobalSearch = () => {
   const router = useRouter();
-  const pathename = usePathname();
   const searchParams = useSearchParams();
 
   const query = searchParams.get('q');
   const [search, setSearch] = useState(query || '');
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search) {
         const fromUrl = fromUrlQuery({
           params: searchParams.toString(),
-          key: 'q',
+          key: 'global',
           value: search,
         });
         router.push(fromUrl, { scroll: false });
       } else {
-        if (route === pathename) {
+        if (query) {
           const removeUrl = removeKeysFromQuery({
             params: searchParams.toString(),
-            keysToRemove: ['q'],
+            keysToRemove: ['global', 'type'],
           });
           router.push(removeUrl, { scroll: false });
         }
       }
       return () => clearTimeout(delayDebounce);
-    }, 3000);
+    }, 300);
   }, [router, search, searchParams, query]);
 
   return (
@@ -53,11 +54,14 @@ const GlobalSearch = () => {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
+            if (!isOpen) setIsOpen(true);
+            if (e.target.value === '' && isOpen) setIsOpen(false);
           }}
           className="paragraph-regular no-focus placeholder 
-          background-light800_darkgradient text-dark-200_light700 border-none shadow-none"
+          background-light800_darkgradient text-dark500_light700 border-none shadow-none"
         />
       </div>
+      {isOpen && <GlobalResults />}
     </div>
   );
 };

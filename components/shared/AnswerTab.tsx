@@ -1,10 +1,13 @@
 import { getUserAnswers } from '@/lib/actions/user.actions';
-import React from 'react';
 import AnswersCard from '../card/AnswersCard';
 
-async function AnswerTab({ searchParams, userId, clerkId }) {
+interface Props {
+  userId: string;
+}
+
+async function AnswerTab({ userId }: Props) {
   const { answers } = await getUserAnswers({ userId });
-  console.log(answers);
+
   return (
     <div>
       {answers.map((answer) => (

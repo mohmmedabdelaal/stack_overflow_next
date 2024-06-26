@@ -27,7 +27,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
     <div className="container py-12">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row ">
         <div className="flex flex-col items-start gap-4 lg:grow">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {/* <div className="text-dark500_light700 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div className="card">
               <h3 className="text-xl font-bold">Questions</h3>
               <p className="text-2xl">{userInfo.user.questions}</p>
@@ -40,7 +40,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
               <h3 className="text-xl font-bold">Upvotes</h3>
               <p className="text-2xl">{userInfo.user.upvotes}</p>
             </div>
-          </div>
+          </div> */}
 
           <Image
             src={userInfo?.user.picture}
@@ -100,22 +100,27 @@ const Page = async ({ params, searchParams }: URLProps) => {
         totalAnswers={userInfo.totalAnswers}
         totalQuestions={userInfo.totalQuestions}
         reputation={userInfo.reputation}
-        badges={{}}
+        // badges={}
       />
       <div className="mt-16 flex gap-10">
-        <Tabs defaultValue="top-posts" className="w-[400px]">
-          <TabsList>
-            <TabsTrigger value="top-posts">Top Posts</TabsTrigger>
+        <Tabs defaultValue="top-posts" className="flex-1">
+          <TabsList className="background-light800_dark400 min-h-[42px] p-1">
+            <TabsTrigger value="top-posts" className="tab">
+              Top Posts
+            </TabsTrigger>
             <TabsTrigger value="answers">Answers</TabsTrigger>
           </TabsList>
-          <TabsContent value="top-posts">
+          <TabsContent
+            value="top-posts"
+            className="mt-5 flex w-full flex-col gap-5"
+          >
             <QuestionTab
               searchParams={searchParams}
               userId={userInfo.user._id}
               clerkId={clerkId}
             />
           </TabsContent>
-          <TabsContent value="answers">
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
             <AnswerTab
               userId={userInfo.user._id}
               clerkId={clerkId}
