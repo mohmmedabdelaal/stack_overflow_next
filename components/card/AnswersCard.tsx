@@ -1,40 +1,78 @@
-import React from 'react';
-import Image from 'next/image';
-import { getTimestamp } from '@/lib/utils';
-import RenderHTML from '@/components/shared/RenderHTML';
+import { formatAndDivideNumber, getTimestamp } from '@/lib/utils';
+// import RenderHTML from '@/components/shared/RenderHTML';
 import Link from 'next/link';
-
-interface AuthorProps {
-  content: string;
-  author: {};
-  createdAt: {};
+import { SignedIn } from '@clerk/nextjs';
+import EditDeleteAction from '../shared/EditDeleteAction';
+import Metric from '../shared/Metric';
+interface Props {
+  clerkId?: string | null;
+  _id: string;
+  question: {
+    _id: string;
+    title: string;
+  };
+  author: {
+    _id: string;
+    clerkId: string;
+    name: string;
+    picture: string;
+  };
+  upvotes: number;
+  createdAt: Date;
 }
-const AnswersCard = ({ content, author, createdAt }: AuthorProps) => {
-  const { name, picture, clerkId } = author;
+const AnswersCard = ({
+  clerkId,
+  _id,
+  question,
+  author,
+  upvotes,
+  createdAt,
+}: Props) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
-    <article className="light-border text-dark500_light700 border-b py-10">
-      <div className="mb-8 flex flex-col-reverse justify-between gap-5">
-        <Link
-          href={`/profile/${clerkId}`}
-          className="flex flex-1 items-start gap-1 sm:items-center"
-        >
-          <Image
-            src={picture}
-            width={18}
-            height={18}
-            alt="profile"
-            className="rounded-full object-cover max-sm:mt-0.5"
-          />
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <p className="body-smibold text-dark-300_light700">{name}</p>
-            <p className="small-regular text-light-400_light500 ml-0.5 mt-0.5 line-clamp-1">
-              Answered {getTimestamp(createdAt)}
-            </p>
-          </div>
-        </Link>
+    <Link
+      href={`/question/${question._id}/#${_id}`}
+      className="card-wrapper rounded-[10px] px-11 py-9"
+    >
+      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
+        <div>
+          <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
+            {getTimestamp(createdAt)}
+          </span>
+          <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
+            {question.title}
+          </h3>
+        </div>
+        <SignedIn>
+          {showActionButtons && (
+            <EditDeleteAction type="Answer" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </div>
-      <RenderHTML data={content} />
-    </article>
+
+      <div className="flex-between mt-6 w-full flex-wrap gap-3">
+        <Metric
+          imgUrl={author.picture}
+          alt="user avatar"
+          value={author.name}
+          title={` • asked ${getTimestamp(createdAt)}`}
+          href={`/profile/${author.clerkId}`}
+          textStyle="body-medium text-dark400_light700"
+          isAuthor
+        />
+
+        <div className="flex-center gap-3">
+          <Metric
+            imgUrl="/assets/icons/like.svg"
+            alt="like icon"
+            value={formatAndDivideNumber(upvotes)}
+            title=" Votes"
+            textStyle="small-medium text-dark400_light800"
+          />
+        </div>
+      </div>
+    </Link>
   );
 };
 

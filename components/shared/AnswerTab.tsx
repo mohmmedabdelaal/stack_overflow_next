@@ -1,23 +1,34 @@
 import { getUserAnswers } from '@/lib/actions/user.actions';
+import { SearchPramsProps } from '@/types';
 import AnswersCard from '../card/AnswersCard';
+import Pagination from './Paginations';
 
-interface Props {
+interface Props extends SearchPramsProps {
   userId: string;
+  clerkId?: string | null;
 }
 
-async function AnswerTab({ userId }: Props) {
-  const { answers } = await getUserAnswers({ userId });
+async function AnswerTab({ searchParams, userId, clerkId }: Props) {
+  const results = await getUserAnswers({
+    userId,
+    page: searchParams.page ? +searchParams.page : 1,
+  });
 
   return (
     <div>
-      {answers.map((answer) => (
+      {results.answers.map((item) => (
         <AnswersCard
-          key={answer._id}
-          content={answer.content}
-          author={answer.author}
-          createdAt={answer.createdAt}
+          clerkId={clerkId}
+          _id={item._id}
+          question={item.question}
+          key={item._id}
+          author={item.author}
+          createdAt={item.createdAt}
         />
       ))}
+      <div className="mt-10">
+        {/* <Pagination pageNumber={searchParams?.page ? +searchParams.page: 1} isNext={results.isNextAnswer} /> */}
+      </div>
     </div>
   );
 }

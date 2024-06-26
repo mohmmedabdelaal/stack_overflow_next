@@ -11,7 +11,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -29,7 +28,7 @@ const Answer = ({ authorId, questionId }: Props) => {
   const pathName = usePathname();
   const [isSubmit, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
-  const router = useRouter();
+  //   const router = useRouter();
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
     defaultValues: {
