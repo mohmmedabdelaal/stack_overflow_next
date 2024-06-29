@@ -1,21 +1,43 @@
-import { Button } from '@/components/ui/button';
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { ReloadIcon } from '@radix-ui/react-icons';
 import GlobalFilters from './GlobalFilters';
-
-const results = [
-  {
-    type: 'question',
-    id: '65ce5c873ceb3427f3f3c5f1',
-    title: 'How to use Tailwind CSS?',
-  },
-  { type: 'answer', id: '456', title: 'Best practices for Next.js?' },
-  { type: 'user', id: '789', title: "John Doe's Profile" },
-  { type: 'tag', id: '101', title: 'React.js' },
-];
+import { useSearchParams } from 'next/navigation';
+import { getGlobalSearch } from '@/lib/actions/general.actions';
 
 const GlobalResults = () => {
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState([
+    { type: 'question', _id: 1, title: 'Next.js question' },
+    { type: 'tag', _id: 1, title: 'Nextjs' },
+    { type: 'user', _id: 1, title: 'jsm' },
+  ]);
+  const global = searchParams.get('global');
+  const type = searchParams.get('type');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setResult([]);
+      try {
+        const data = await getGlobalSearch({ query: global, type });
+        setResult(JSON.parse(data));
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (global) {
+      fetchData();
+    }
+  }, [global, type]);
+
   const renderLink = (type: string, id: string) => {
     switch (type) {
       case 'question':
@@ -31,43 +53,61 @@ const GlobalResults = () => {
     }
   };
   return (
-    <div className="background-light800_darkgradient absolute left-0 top-full z-50 mt-2 w-full max-w-[600px] rounded-xl shadow-lg max-md:hidden">
+    <div className="background-light800_darkgradient absolute left-0 top-full z-50 mt-2 w-full max-w-[600px] rounded-xl py-6 shadow-sm dark:bg-dark-400">
       {/* Filter Buttons (Improved Styling) */}
-      <div className="flex flex-wrap items-center justify-start gap-2 p-3">
-        <GlobalFilters onFilterChange={() => {}} />
-      </div>
+
+      <GlobalFilters />
 
       {/* Divider (Simplified) */}
       <div className="my-2 border-t border-gray-200"></div>
 
       {/* Top Match Section */}
       <div className="mt-2">
-        <h3 className="h3-bold text-dark200_light900 mb-2 ml-3">Top Match</h3>
-
-        {results.length > 0 &&
-          results.map((item, index) => (
-            <Link
-              key={item.id + item.type + index}
-              href={renderLink(item.type, item.id)}
-              className="flex items-center gap-4 rounded-md p-2 text-light-900 transition-colors duration-200 hover:bg-gray-200"
-            >
-              <Image
-                src="/assets/icons/tag.svg"
-                width={24}
-                height={24}
-                alt="tag"
-                className="invert-colors mt-1 object-contain"
-              />
-              <div className="flex flex-col">
-                <p className="body-medium text-dark200_light800 line-clamp-1">
-                  {item.title}
-                </p>
-                <p className="text-light400_light500 small-medium mt-1 font-bold capitalize">
-                  {item.type}
+        <p className="text-dark400_light900 paragraph-semibold px-5">
+          Top Match
+        </p>
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center">
+            <ReloadIcon className="my-2 h-10 w-10 animate-spin text-primary-500" />
+            <p className="text-dark-200_light800 body-semibold">
+              Browsing the database
+            </p>
+          </div>
+        ) : (
+          <div className="fle flex-col gap-2">
+            {result.length > 0 ? (
+              result.map((item: any, index: number) => (
+                <Link
+                  key={item.type + item._id + index}
+                  href={renderLink(item.type, item._id)}
+                  className="flex cursor-pointer items-start gap-4 rounded-md px-5 py-2.5 text-light-900 transition-colors duration-200 hover:bg-gray-200"
+                >
+                  <Image
+                    src="/assets/icons/tag.svg"
+                    width={24}
+                    height={24}
+                    alt="tag"
+                    className="invert-colors mt-1 object-contain"
+                  />
+                  <div className="flex flex-col">
+                    <p className="body-medium text-dark200_light800 line-clamp-1">
+                      {item.title}
+                    </p>
+                    <p className="text-light400_light500 small-medium mt-1 font-bold capitalize">
+                      {item.type}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="flex-center flex-col px-5">
+                <p className="text-dark200_light800 body-regular px-5 py-2.5">
+                  Oops, no results found!
                 </p>
               </div>
-            </Link>
-          ))}
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

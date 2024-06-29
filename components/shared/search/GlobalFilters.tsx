@@ -4,51 +4,56 @@ import { Button } from '@/components/ui/button'; // Adjust the path if needed
 import React, { useState } from 'react';
 import { GlobalSearchFilters } from '@/constants/fitlers';
 import { useRouter, useSearchParams } from 'next/navigation';
-interface FilterButtonProps {
-  name: string;
-  value: string;
-  onClick: (value: string) => void; // Add onClick prop for filtering
-}
+import { fromUrlQuery } from '@/lib/utils';
 
-const FilterButton: React.FC<FilterButtonProps> = ({
-  name,
-  value,
-  onClick,
-}) => {
+const GlobalFilters = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  console.log(searchParams);
 
   const typeParams = searchParams.get('type');
 
   const [active, setActive] = useState(typeParams || '');
-  return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={`light-border-2 small-medium :text-light-800 rounded-2xl px-5 py-2 capitalize dark:hover:text-primary-500 ${
-        active === value
-          ? 'bg-primary-500 text-light-900'
-          : 'bg-light-700 text-dark-400 hover:text-primary-500 dark:bg-dark-500'
-      }`}
-      onClick={() => onClick(value)} // Trigger filter action on click
-    >
-      {name}
-    </Button>
-  );
-};
+  const handleClick = (item: string) => {
+    if (item === active) {
+      setActive('');
+      const newSearchParams = fromUrlQuery({
+        params: searchParams.toString(),
+        key: 'type',
+        value: null,
+      });
 
-interface GlobalFiltersProps {
-  onFilterChange: (filter: string) => void; // Callback for filtering
-}
-
-const GlobalFilters: React.FC<GlobalFiltersProps> = ({ onFilterChange }) => {
+      router.push(newSearchParams, { scroll: null });
+    } else {
+      setActive(item);
+      const newSearchParams = fromUrlQuery({
+        params: searchParams.toString(),
+        key: 'type',
+        value: item.toLowerCase(),
+      });
+      router.push(newSearchParams, { scroll: null });
+    }
+  };
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 p-3">
-      <p className="ml-3">Type:</p>
-      {GlobalSearchFilters.map((filter) => (
-        <FilterButton key={filter.value} {...filter} onClick={onFilterChange} />
-      ))}
+    <div className="flex items-center gap-5 px-5">
+      <p className="text-dark400_light900 body-medium">Type: </p>
+      <div className="gpa-3 flex">
+        {GlobalSearchFilters.map((filter) => (
+          <Button
+            variant="ghost"
+            key={filter.value + filter.name}
+            size="sm"
+            className={`light-border-2 small-medium :text-light-800 rounded-2xl px-5 py-2 capitalize dark:hover:text-primary-500 ${
+              active === filter.value
+                ? 'bg-primary-500 text-light-900'
+                : 'bg-light-700 text-dark-400 hover:text-primary-500 dark:bg-dark-500'
+            }`}
+            onClick={() => handleClick(filter.value)} // Trigger filter action on click
+          >
+            {filter.name}
+          </Button>
+          // <FilterButton key={filter.value} {...filter} onClick={onFilterChange} />
+        ))}
+      </div>
     </div>
   );
 };
