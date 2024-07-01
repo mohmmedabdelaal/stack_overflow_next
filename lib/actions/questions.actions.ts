@@ -17,6 +17,7 @@ import { revalidatePath } from 'next/cache';
 import { FilterQuery } from 'mongoose';
 import Answer from '@/database/Answer.model';
 import Interaction from '@/database/interaction.model';
+import { BADGE_CRITERIA } from '@/constants';
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -298,3 +299,5 @@ export async function getHotQuestions() {
     console.log(error);
   }
 }
+
+/// / GET reputation

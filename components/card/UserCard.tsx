@@ -17,7 +17,7 @@ interface UserProps {
 
 const UserCard = async ({ user, variant = 'default' }: UserProps) => {
   // Fetch interacted tags (ensure tag._id is converted to string in getTopInteractedTags)
-  const interactedTags = await getTopInteractedTags({ userId: user._id });
+  const { tags } = await getTopInteractedTags({ userId: user._id });
 
   return (
     <Link
@@ -64,8 +64,8 @@ const UserCard = async ({ user, variant = 'default' }: UserProps) => {
             @{user.username}
           </p>
           <div className="mt-1.5 flex flex-wrap gap-2">
-            {interactedTags.length > 0 ? (
-              interactedTags.map((tag) => (
+            {tags.length > 0 ? (
+              tags.map((tag) => (
                 <RenderTags key={tag._id} _id={tag._id} name={tag.name} />
               ))
             ) : (

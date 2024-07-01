@@ -24,6 +24,7 @@ async function AnswerTab({ searchParams, userId, clerkId }: Props) {
           key={item._id}
           author={item.author}
           createdAt={item.createdAt}
+          upvotes={item.upvotes}
         />
       ))}
       <div className="mt-10">
