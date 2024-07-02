@@ -29,6 +29,11 @@ export async function createAnswer(params: CreateAnswerParams) {
       $push: { answers: newAnswer._id },
     });
 
+    // Update author's reputation
+    await User.findByIdAndUpdate(author, {
+      $inc: { reputation: 5 }, // Assuming reputationValues.CREATE_ANSWER is defined
+    });
+
     await Interaction.create({
       user: author,
       action: 'answer',
@@ -36,6 +41,7 @@ export async function createAnswer(params: CreateAnswerParams) {
       answer: newAnswer._id,
       tags: questionObject.tags,
     });
+
     revalidatePath(path);
   } catch (e) {
     console.log(e);
@@ -85,6 +91,9 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
     }
 
     // Increment author's reputation
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasupVoted ? -1 : 1 },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -120,7 +129,10 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
       throw new Error('Answer not found');
     }
 
-    // Increment author's reputation
+    // Decrement author's reputation
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasdownVoted ? -1 : 1 },
+    });
 
     revalidatePath(path);
   } catch (error) {

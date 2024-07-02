@@ -14,6 +14,8 @@ import Question from '@/database/question.model';
 import Answer from '@/database/Answer.model';
 import Tag from '@/database/tag.model';
 import { FilterQuery } from 'mongoose';
+import { BadgeCriteriaType } from '@/types';
+import { assignBadges } from '../utils';
 
 export async function getUserById(params: any) {
   try {
@@ -193,7 +195,7 @@ export async function getUserInfo(params: GetUserByIdParams) {
         },
       },
     ]);
-    const [answersUpvotes] = await Answer.aggregate([
+    const [answerUpvotes] = await Answer.aggregate([
       { $match: { author: user._id } },
       {
         $project: {
@@ -204,15 +206,36 @@ export async function getUserInfo(params: GetUserByIdParams) {
       {
         $group: {
           _id: null,
+          totalUpvotes: { $sum: '$upvotes' },
+        },
+      },
+    ]);
+
+    const [questionViews] = await Answer.aggregate([
+      { $match: { author: user._id } },
+      {
+        $group: {
+          _id: null,
           totalViews: { $sum: '$views' },
         },
       },
     ]);
+
+    const criteria = [
+      { type: 'QUESTION_COUNT' as BadgeCriteriaType, count: totalQuestions },
+      { type: 'ANSWER_COUNT' as BadgeCriteriaType, count: totalAnswers },
+      { type: 'QUESTION_UPVOTES' as BadgeCriteriaType, count: questionUpvotes },
+      { type: 'ANSWER_UPVOTES' as BadgeCriteriaType, count: answerUpvotes },
+      { type: 'TOTAL_VIEWS' as BadgeCriteriaType, count: questionViews },
+    ];
+
+    const badgesCounts = assignBadges({criteria})
     return {
       user,
       totalQuestions,
       totalAnswers,
       reputation: user.reputation,
+      badgesCounts
     };
   } catch (e) {
     console.log(e);
