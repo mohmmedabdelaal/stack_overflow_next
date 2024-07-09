@@ -35,6 +35,7 @@ const Answer = ({ authorId, questionId }: Props) => {
       answer: '',
     },
   });
+
   const onSubmit = async (values: z.infer<typeof AnswerSchema>) => {
     setIsSubmitting(true);
     try {
@@ -56,6 +57,44 @@ const Answer = ({ authorId, questionId }: Props) => {
       setIsSubmitting(false);
     }
   };
+
+  const generateAIAnswer = async () => {
+    if (!authorId) return;
+
+    // setSetIsSubmittingAI(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_CHATGPT_API_KEY}/api/chatgpt`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ question }),
+        }
+      );
+
+      const aiAnswer = await response.json();
+
+      // Convert plain text to HTML format
+
+      const formattedAnswer = aiAnswer.reply.replace(/\n/g, '<br />');
+
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+        editor.setContent(formattedAnswer);
+      }
+
+      // toast({
+      //   title: "Success!",
+      //   description: "AI Answer has been placed.",
+      // });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setSetIsSubmittingAI(false);
+      console.log('error');
+    }
+  };
+
   return (
     <div>
       <div className="text-dark500_light700 flex justify-between gap-5">
@@ -64,7 +103,7 @@ const Answer = ({ authorId, questionId }: Props) => {
         </h4>
         <Button
           className=" btn light-border-2 flex gap-1 rounded-md bg-light-400 px-4 py-2.5"
-          onClick={() => {}}
+          onClick={() => generateAIAnswer()}
         >
           <Image
             src="/assets/icons/stars.svg"
