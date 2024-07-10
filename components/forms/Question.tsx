@@ -23,6 +23,7 @@ import {
   updateQuestion,
 } from '@/lib/actions/questions.actions';
 import { useRouter, usePathname } from 'next/navigation';
+import { useToast } from '../ui/use-toast';
 
 interface Props {
   mongodbUserId: string;
@@ -33,6 +34,7 @@ interface Props {
 // const type = 'create'
 const Question = ({ mongodbUserId, type, results }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const editorRef = useRef(null);
   const router = useRouter();
   const pathName = usePathname();
@@ -69,6 +71,11 @@ const Question = ({ mongodbUserId, type, results }: Props) => {
         path: pathName,
       });
       router.push('/');
+      toast({
+        variant: 'default',
+        title: 'Question created',
+        description: 'You question just created',
+      });
     } catch (e) {
       console.log(e);
     } finally {

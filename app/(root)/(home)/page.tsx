@@ -11,6 +11,7 @@ import { getQuestions } from '@/lib/actions/questions.actions';
 import { auth } from '@clerk/nextjs';
 import { SearchPramsProps } from '@/types';
 import Pagination from '@/components/shared/Paginations';
+import Loading from './loading';
 
 export default async function Home({ searchParams }: SearchPramsProps) {
   const { userId: clerkId } = auth();
@@ -19,6 +20,8 @@ export default async function Home({ searchParams }: SearchPramsProps) {
     filter: searchParams.filter,
     page: searchParams.page ? +searchParams.page : 1,
   });
+  // const isLoading = true;
+  // if (isLoading) return <Loading />;
 
   return (
     <>

@@ -6,12 +6,15 @@ import UserCard from '@/components/card/UserCard';
 import { getAllUsers } from '@/lib/actions/user.actions';
 import { SearchPramsProps } from '@/types';
 import NoResults from '@/components/shared/NoResults';
+import Loading from './loading';
 
 const Page = async ({ searchParams }: SearchPramsProps) => {
   const results = await getAllUsers({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
   });
+  // const isLoading = true;
+  // if(isLoading) return <Loading/>
 
   return (
     <>
