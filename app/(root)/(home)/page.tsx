@@ -11,7 +11,32 @@ import { getQuestions } from '@/lib/actions/questions.actions';
 import { auth } from '@clerk/nextjs';
 import { SearchPramsProps } from '@/types';
 import Pagination from '@/components/shared/Paginations';
-import Loading from './loading';
+
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dev Overflow | Home', // Default title
+  description:
+    'A platform for developers to ask and answer questions, share knowledge, and collaborate.', // Default description
+  openGraph: {
+    title: 'Dev Overflow - Your Source for Developer Q&A',
+    description:
+      'A platform for developers to ask and answer questions, share knowledge, and collaborate.',
+
+    siteName: 'Dev Overflow',
+    images: [
+      {
+        url: '/assets/images/logo.png', // Path to your logo or an image representing your site
+        width: 800,
+        height: 600,
+        alt: 'Dev Overflow Logo',
+      },
+    ],
+    locale: 'en_US', // Set your default locale
+    type: 'website',
+  },
+  // Add other metadata properties like robots, icons, etc.
+};
 
 export default async function Home({ searchParams }: SearchPramsProps) {
   const { userId: clerkId } = auth();
@@ -20,8 +45,6 @@ export default async function Home({ searchParams }: SearchPramsProps) {
     filter: searchParams.filter,
     page: searchParams.page ? +searchParams.page : 1,
   });
-  // const isLoading = true;
-  // if (isLoading) return <Loading />;
 
   return (
     <>

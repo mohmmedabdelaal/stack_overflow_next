@@ -11,6 +11,34 @@ import RenderTags from '@/components/shared/RenderTags';
 import Answer from '@/components/forms/Answer';
 import AllAnswers from '@/components/shared/AllAnswers';
 import Votes from '@/components/shared/Votes';
+import { Metadata } from 'next';
+// app/question/[questionId]/page.tsx (Example)
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { questionId: string };
+}) {
+  const question = await getQuestionById({ questionId: params.id });
+
+  return {
+    title: question.title,
+    description: question.content.substring(0, 150) + '...',
+    openGraph: {
+      title: question.title,
+      description: question.content.substring(0, 150) + '...',
+      // Optionally, add an image for the question if you have one
+      images: [
+        {
+          url: '/path/to/question-image.jpg', // Or a default image
+          width: 800,
+          height: 600,
+          alt: 'Question Image',
+        },
+      ],
+    },
+  };
+}
 
 const Page = async ({ params }: any) => {
   const { userId: clerkId } = auth();

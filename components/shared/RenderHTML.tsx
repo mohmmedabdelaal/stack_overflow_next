@@ -33,7 +33,11 @@ const RenderHTML = ({ data }: Props) => {
   useEffect(() => {
     Prism.highlightAll();
   }, []);
-  return <div className="text-dark500_light700">{parse(data)}</div>;
+  return (
+    <div className="text-dark500_light700 markdown w-full min-w-full">
+      {parse(data)}
+    </div>
+  );
 };
 
 export default RenderHTML;
