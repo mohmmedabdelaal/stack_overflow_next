@@ -41,7 +41,7 @@ const Question = ({ mongodbUserId, type, results }: Props) => {
   const parsedResults = results && JSON.parse(results || '');
   console.log(parsedResults);
 
-  const allTags = parsedResults?.tags.map((tag) => tag.name);
+  const allTags = parsedResults?.tags.map((tag: any) => tag.name);
 
   const form = useForm<z.infer<typeof QuestionsSchema>>({
     resolver: zodResolver(QuestionsSchema),

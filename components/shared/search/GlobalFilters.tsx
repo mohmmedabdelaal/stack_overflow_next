@@ -22,7 +22,7 @@ const GlobalFilters = () => {
         value: null,
       });
 
-      router.push(newSearchParams, { scroll: null });
+      router.push(newSearchParams, { scroll: undefined });
     } else {
       setActive(item);
       const newSearchParams = fromUrlQuery({
@@ -30,13 +30,13 @@ const GlobalFilters = () => {
         key: 'type',
         value: item.toLowerCase(),
       });
-      router.push(newSearchParams, { scroll: null });
+      router.push(newSearchParams, { scroll: undefined });
     }
   };
   return (
     <div className="flex items-center gap-5 px-5">
       <p className="text-dark400_light900 body-medium">Type: </p>
-      <div className="gpa-3 flex ">
+      <div className="flex gap-3 ">
         {GlobalSearchFilters.map((filter) => (
           <Button
             variant="ghost"

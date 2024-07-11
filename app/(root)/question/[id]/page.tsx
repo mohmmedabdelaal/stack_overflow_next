@@ -21,21 +21,8 @@ export async function generateMetadata({
   const question = await getQuestionById({ questionId: id });
 
   return {
-    title: question.title,
-    description: question.content.substring(0, 150) + '...',
-    openGraph: {
-      title: question.title,
-      description: question.content.substring(0, 150) + '...',
-      // Optionally, add an image for the question if you have one
-      images: [
-        {
-          url: '/path/to/question-image.jpg', // Or a default image
-          width: 800,
-          height: 600,
-          alt: 'Question Image',
-        },
-      ],
-    },
+    title: question?.title,
+    description: question?.content.substring(0, 150) + '...',
   };
 }
 
@@ -114,7 +101,7 @@ const Page = async ({ params }: any) => {
       <RenderHTML data={content} />
       <div className="mt-8 flex flex-wrap gap-2">
         {result.tags.length > 0 ? (
-          result.tags.map((tag:any) => (
+          result.tags.map((tag: any) => (
             <RenderTags
               key={tag._id}
               _id={JSON.stringify(tag._id)}
@@ -134,6 +121,7 @@ const Page = async ({ params }: any) => {
       </div>
       <div>
         <Answer
+          question={result.content}
           authorId={JSON.stringify(mongodbUser?._id)}
           questionId={JSON.stringify(result._id)}
         />

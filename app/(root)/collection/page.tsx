@@ -4,12 +4,12 @@ import { QuestionFilters } from '@/constants/fitlers';
 import NoResults from '@/components/shared/NoResults';
 import QuestionCard from '@/components/card/QuestionCard';
 import { getAllSavedQuestions } from '@/lib/actions/questions.actions';
-import { useAuth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs';
 import LocalSearch from '@/components/shared/search/LocalSearch';
 import { SearchPramsProps } from '@/types';
 
 export default async function Collections({ searchParams }: SearchPramsProps) {
-  const { userId } = useAuth();
+  const { userId } = auth();
   if (!userId) return null;
   const result = await getAllSavedQuestions({
     clerkId: userId,

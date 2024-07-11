@@ -14,19 +14,22 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { createAnswer } from '@/lib/actions/answer.actions';
 import { useTheme } from '@/context/ThemeProvider';
 import Image from 'next/image';
+import { toast } from '../ui/use-toast';
 
 interface Props {
   authorId: string;
   questionId: string;
+  question: string;
 }
-const Answer = ({ authorId, questionId }: Props) => {
+const Answer = ({ question, authorId, questionId }: Props) => {
   const { mode } = useTheme();
   const pathName = usePathname();
   const [isSubmit, setIsSubmitting] = useState(false);
+  const [isSubmittingAI, setSetIsSubmittingAI] = useState(false);
   const editorRef = useRef(null);
   //   const router = useRouter();
   const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -61,11 +64,11 @@ const Answer = ({ authorId, questionId }: Props) => {
   const generateAIAnswer = async () => {
     if (!authorId) return;
 
-    // setSetIsSubmittingAI(true);
+    setSetIsSubmittingAI(true);
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_CHATGPT_API_KEY}/api/chatgpt`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`,
         {
           method: 'POST',
           body: JSON.stringify({ question }),
@@ -83,15 +86,14 @@ const Answer = ({ authorId, questionId }: Props) => {
         editor.setContent(formattedAnswer);
       }
 
-      // toast({
-      //   title: "Success!",
-      //   description: "AI Answer has been placed.",
-      // });
+      toast({
+        title: 'Success!',
+        description: 'AI Answer has been placed.',
+      });
     } catch (error) {
       console.log(error);
     } finally {
-      // setSetIsSubmittingAI(false);
-      console.log('error');
+      setSetIsSubmittingAI(false);
     }
   };
 
@@ -102,17 +104,23 @@ const Answer = ({ authorId, questionId }: Props) => {
           Write your answer here..
         </h4>
         <Button
-          className=" btn light-border-2 flex gap-1 rounded-md bg-light-400 px-4 py-2.5"
-          onClick={() => generateAIAnswer()}
+          className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
+          onClick={generateAIAnswer}
         >
-          <Image
-            src="/assets/icons/stars.svg"
-            alt="stars"
-            width={22}
-            height={22}
-            className="object-contain"
-          />
-          Generate Ai answer..
+          {isSubmittingAI ? (
+            <>Generating...</>
+          ) : (
+            <>
+              <Image
+                src="/assets/icons/stars.svg"
+                alt="star"
+                width={12}
+                height={12}
+                className="object-contain"
+              />
+              Generate AI Answer
+            </>
+          )}
         </Button>
       </div>
 

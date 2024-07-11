@@ -22,7 +22,7 @@ const LocalSearch = ({
   iconPlace,
 }: Props) => {
   const router = useRouter();
-  const pathename = usePathname();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const query = searchParams.get('q');
@@ -37,7 +37,7 @@ const LocalSearch = ({
         });
         router.push(fromUrl, { scroll: false });
       } else {
-        if (route === pathename) {
+        if (route === pathname) {
           const removeUrl = removeKeysFromQuery({
             params: searchParams.toString(),
             keysToRemove: ['q'],
@@ -47,7 +47,7 @@ const LocalSearch = ({
       }
       return () => clearTimeout(delayDebounce);
     }, DEBOUNCE_MS);
-  }, [router, route, search, searchParams, query]);
+  }, [router, pathname, route, search, searchParams, query]);
   return (
     <div
       className={`background-light800_darkgradient 

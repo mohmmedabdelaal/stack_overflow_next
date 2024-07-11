@@ -24,8 +24,11 @@ const GlobalResults = () => {
       setResult([]);
       try {
         const data = await getGlobalSearch({ query: global, type });
-        setResult(JSON.parse(data));
-        console.log(data);
+        if (typeof data === 'string') {
+          setResult(JSON.parse(data));
+        } else {
+          setResult(data.results); // Assuming you want the 'results' array
+        }
       } catch (error) {
         console.log(error);
         throw error;
