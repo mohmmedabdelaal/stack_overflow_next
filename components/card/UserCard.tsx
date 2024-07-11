@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import RenderTags from '@/components/shared/RenderTags';
 import { Badge } from '@/components/ui/badge';
