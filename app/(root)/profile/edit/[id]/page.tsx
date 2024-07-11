@@ -17,9 +17,6 @@ const page = async () => {
     return notFound(); // Redirect to 404 if user not found
   }
 
-  // if (userId !== mongoUser) {
-  //   return notFound(); // Redirect to 404 if the user is not the owner of the profile
-  // }
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">Edit Profile</h1>

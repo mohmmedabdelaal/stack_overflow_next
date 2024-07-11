@@ -27,21 +27,6 @@ const Page = async ({ params, searchParams }: URLProps) => {
     <div className="container py-12">
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row ">
         <div className="flex flex-col items-start gap-4 lg:grow">
-          {/* <div className="text-dark500_light700 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            <div className="card">
-              <h3 className="text-xl font-bold">Questions</h3>
-              <p className="text-2xl">{userInfo.user.questions}</p>
-            </div>
-            <div className="card">
-              <h3 className="text-xl font-bold">Answers</h3>
-              <p className="text-2xl">{userInfo.user.answers}</p>
-            </div>
-            <div className="card">
-              <h3 className="text-xl font-bold">Upvotes</h3>
-              <p className="text-2xl">{userInfo.user.upvotes}</p>
-            </div>
-          </div> */}
-
           <Image
             src={userInfo?.user.picture}
             alt="profile picture"
@@ -114,11 +99,9 @@ const Page = async ({ params, searchParams }: URLProps) => {
             value="top-posts"
             className="mt-5 flex w-full flex-col gap-5"
           >
-            <QuestionTab
-              searchParams={searchParams}
-              userId={userInfo.user._id}
-              clerkId={clerkId}
-            />
+            {clerkId && (
+              <QuestionTab userId={userInfo.user._id} clerkId={clerkId} />
+            )}
           </TabsContent>
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
             <AnswerTab
