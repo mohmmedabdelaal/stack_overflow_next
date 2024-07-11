@@ -1,5 +1,4 @@
 'use client';
-
 import { deleteAnswer } from '@/lib/actions/answer.actions';
 import { deleteQuestion } from '@/lib/actions/questions.actions';
 import Image from 'next/image';

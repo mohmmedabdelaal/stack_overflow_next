@@ -17,7 +17,7 @@ import { revalidatePath } from 'next/cache';
 import { FilterQuery } from 'mongoose';
 import Answer from '@/database/Answer.model';
 import Interaction from '@/database/interaction.model';
-import { BADGE_CRITERIA } from '@/constants';
+// import { BADGE_CRITERIA } from '@/constants';
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -25,7 +25,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     const { pageSize = 10, page = 1, searchQuery, filter } = params;
 
     const skipAmount = (page - 1) * pageSize;
-    const regexQuery = { $regex: new RegExp(searchQuery, 'i') };
+    const regexQuery = { $regex: new RegExp(searchQuery ?? '', 'i') };
 
     const query: FilterQuery<typeof Question> = {};
 
@@ -197,7 +197,6 @@ export async function toggleSavedQuestions(params: ToggleSaveQuestionParams) {
     const user = await User.findById(userId);
     const isSavedQuestion = user.saved.includes(questionId);
 
-    let updatedUser;
     if (isSavedQuestion) {
       await User.findByIdAndUpdate(
         userId,
@@ -226,7 +225,7 @@ export async function toggleSavedQuestions(params: ToggleSaveQuestionParams) {
 export async function getAllSavedQuestions(params: GetSavedQuestionsParams) {
   try {
     connectToDatabase();
-    const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
+    const { clerkId, searchQuery } = params;
     const query: FilterQuery<typeof Question> = searchQuery
       ? { title: { $regex: new RegExp(searchQuery, 'i') } }
       : {};

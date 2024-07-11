@@ -5,7 +5,7 @@ const FilterTags = async () => {
   const popularTags = await getPopularTags();
   return (
     <div>
-      {popularTags.map((tag) => (
+      {popularTags?.map((tag) => (
         <RenderTags
           key={tag._id}
           _id={tag._id}

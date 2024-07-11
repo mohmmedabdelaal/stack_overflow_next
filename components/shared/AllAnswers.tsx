@@ -1,5 +1,5 @@
 import { getAllAnswers } from '@/lib/actions/answer.actions';
-import AnswersCard from '@/components/card/AnswersCard';
+// import AnswersCard from '@/components/card/AnswersCard';
 import Filters from '@/components/shared/Filters';
 import { AnswerFilters } from '@/constants/fitlers';
 import Votes from '@/components/shared/Votes';

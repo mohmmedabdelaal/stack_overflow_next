@@ -40,7 +40,7 @@ const RightSidebar = async () => {
       <div className="mt-16 flex-1">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
         <div className="mt-7 flex w-full flex-col gap-4">
-          {popularTags.map((tag) => (
+          {popularTags?.map((tag) => (
             <RenderTags
               key={tag._id.toString()}
               _id={tag._id.toString()}

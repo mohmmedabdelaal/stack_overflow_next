@@ -10,7 +10,7 @@ import Tag, { ITag } from '@/database/tag.model';
 import Question from '@/database/question.model';
 import User from '@/database/user.model';
 import { getQuestionById } from '@/lib/actions/questions.actions';
-import { _FilterQuery, FilterQuery } from 'mongoose';
+import {  FilterQuery } from 'mongoose';
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -47,7 +47,7 @@ export async function getAllTags(params: GetAllTagsParams) {
     const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Tag> = {};
-    const searchRegQuery = new RegExp(searchQuery, 'i');
+    const searchRegQuery = new RegExp(searchQuery ?? '', 'i');
 
     if (searchQuery) {
       query.$or = [{ name: { $regex: searchRegQuery } }];
@@ -81,7 +81,7 @@ export async function getAllTags(params: GetAllTagsParams) {
 export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
   try {
     connectToDatabase();
-    const { tagId, pageSize = 10, page = 1, searchQuery } = params;
+    const { tagId } = params;
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
     const tag = await Tag.findById(tagFilter)
       .populate({ path: 'questions', model: Question })

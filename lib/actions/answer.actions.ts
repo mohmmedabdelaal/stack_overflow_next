@@ -51,7 +51,7 @@ export async function createAnswer(params: CreateAnswerParams) {
 export async function getAllAnswers(params: GetAnswersParams) {
   try {
     connectToDatabase();
-    const { questionId, page = 1, pageSize = 10 } = params;
+    const { questionId} = params;
     const answers = await Answer.find({ question: questionId })
       .populate({ path: 'author', select: '_id clerkId name picture' })
       .sort({ createdAt: -1 });

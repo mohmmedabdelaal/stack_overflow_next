@@ -1,6 +1,5 @@
 'use server';
-import { OpenAIStream, StreamingTextResponse } from 'ai';
-import { Configuration, OpenAIApi } from 'openai-edge';
+
 
 import { connectToDatabase } from '../mongoose';
 import { SearchParams } from './shared.types';
@@ -106,29 +105,3 @@ The flattened results are returned as a JSON string.
 
 Please make sure to import the necessary models and the `connectToDatabase` function in your code.
 */
-
-export async function POST(req: Request) {
-  const { question } = await req.json();
-
-  // You need to get your own API key from OpenAI
-  const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const openai = new OpenAIApi(configuration);
-
-  const prompt = `Answer the question based on context:\n\nContext: ${question}\n\nAnswer:`;
-  const response = await openai.createCompletion({
-    model: 'text-davinci-003',
-    stream: true,
-    prompt,
-    temperature: 0.7,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    max_tokens: 300,
-  });
-
-  const stream = OpenAIStream(response);
-  return new StreamingTextResponse(stream);
-}

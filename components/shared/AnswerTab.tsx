@@ -1,7 +1,7 @@
 import { getUserAnswers } from '@/lib/actions/user.actions';
 import { SearchPramsProps } from '@/types';
 import AnswersCard from '../card/AnswersCard';
-import Pagination from './Paginations';
+// import Pagination from './Paginations';
 
 interface Props extends SearchPramsProps {
   userId: string;
@@ -16,7 +16,7 @@ async function AnswerTab({ searchParams, userId, clerkId }: Props) {
 
   return (
     <div>
-      {results.answers.map((item) => (
+      {results?.answers.map((item) => (
         <AnswersCard
           clerkId={clerkId}
           _id={item._id}

@@ -82,7 +82,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
   try {
     connectToDatabase();
 
-    const { userId, page = 1, pageSize = 10 } = params;
+    const { userId } = params;
 
     const totalQuestions = await Question.countDocuments({ author: userId });
 
@@ -132,7 +132,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
     const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof User> = {};
-    const searchRegQuery = new RegExp(searchQuery, 'i');
+    const searchRegQuery = new RegExp(searchQuery ?? '', 'i');
 
     if (searchQuery) {
       query.$or = [
@@ -229,13 +229,13 @@ export async function getUserInfo(params: GetUserByIdParams) {
       { type: 'TOTAL_VIEWS' as BadgeCriteriaType, count: questionViews },
     ];
 
-    const badgesCounts = assignBadges({criteria})
+    const badgesCounts = assignBadges({ criteria });
     return {
       user,
       totalQuestions,
       totalAnswers,
       reputation: user.reputation,
-      badgesCounts
+      badgesCounts,
     };
   } catch (e) {
     console.log(e);
