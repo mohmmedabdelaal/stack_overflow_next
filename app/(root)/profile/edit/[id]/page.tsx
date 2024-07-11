@@ -1,10 +1,10 @@
 import Profile from '@/components/forms/Profile';
-import { getUserById, getUserInfo } from '@/lib/actions/user.actions';
+import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@clerk/nextjs';
 import React from 'react';
 import { notFound } from 'next/navigation';
 
-const page = async ({ params }) => {
+const page = async () => {
   const { userId } = auth();
 
   const mongoUser = await getUserById({ userId });

@@ -27,9 +27,9 @@ const UserCard = async ({ user, variant = 'default' }: UserProps) => {
       <div className="background-light900_dark200 light-border flex w-full flex-col items-center justify-center rounded-2xl border p-8">
         <div
           className={`
-            relative aspect-square h-48 w-48 overflow-hidden rounded-t-lg 
-            ${variant === 'compact' ? 'h-32 w-32' : ''}
-            md:h-auto md:w-48 md:rounded-none md:rounded-s-lg
+            relative aspect-square size-48 overflow-hidden rounded-t-lg 
+            ${variant === 'compact' ? 'size-32' : ''}
+            md:size-48 md:h-auto md:rounded-none md:rounded-s-lg
           `}
         >
           <Image

@@ -82,7 +82,7 @@ export default async function Home({ searchParams }: SearchPramsProps) {
       <HomeFilters />
       <div className="mt-5 flex w-full flex-col gap-6">
         {questions.length > 0 ? (
-          questions.map((question) => (
+          questions.map((question:any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}

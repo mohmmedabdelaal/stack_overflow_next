@@ -4,7 +4,7 @@ export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
     <div>
-      <h1 className="h1-bold text-dark100_light900">All Users</h1>
+      <h1 className="h1-bold text-dark100_light900">All Tags</h1>
       <div className="mt-2 flex gap-4">
         <Skeleton className="h-10 flex-1" />
         <Skeleton className="h-10 w-[100px]" />

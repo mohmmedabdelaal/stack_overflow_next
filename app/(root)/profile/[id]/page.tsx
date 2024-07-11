@@ -11,7 +11,6 @@ import ProfileLink from '@/components/shared/ProfileLink';
 import Stats from '@/components/shared/Stats';
 import AnswerTab from '@/components/shared/AnswerTab';
 import QuestionTab from '@/components/shared/QuestionTab';
-import { checkAndUpdateBadges } from '@/lib/actions/questions.actions';
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -90,7 +89,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
         <SignedIn>
           {isCurrentUser && (
             <Link href={`/profile/edit/${id}`}>
-              <Button className="paragraph-meduim btn-secondary text-dark300_light900 rounded px-4 py-2 font-bold hover:bg-blue-700">
+              <Button className="paragraph-medium btn-secondary text-dark300_light900 rounded px-4 py-2 font-bold hover:bg-blue-700">
                 Edit Profile
               </Button>
             </Link>

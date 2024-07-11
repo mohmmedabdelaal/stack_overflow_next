@@ -11,15 +11,14 @@ import RenderTags from '@/components/shared/RenderTags';
 import Answer from '@/components/forms/Answer';
 import AllAnswers from '@/components/shared/AllAnswers';
 import Votes from '@/components/shared/Votes';
-import { Metadata } from 'next';
 // app/question/[questionId]/page.tsx (Example)
 
 export async function generateMetadata({
-  params,
+  params: { questionId: id },
 }: {
   params: { questionId: string };
 }) {
-  const question = await getQuestionById({ questionId: params.id });
+  const question = await getQuestionById({ questionId: id });
 
   return {
     title: question.title,
@@ -46,7 +45,7 @@ const Page = async ({ params }: any) => {
   if (clerkId) mongodbUser = await getUserById({ userId: clerkId });
 
   const result = await getQuestionById({ questionId: params.id });
-  const { title, content, _id } = result;
+  const { title, content } = result;
 
   if (!result) {
     console.log('No Question found');
@@ -115,7 +114,7 @@ const Page = async ({ params }: any) => {
       <RenderHTML data={content} />
       <div className="mt-8 flex flex-wrap gap-2">
         {result.tags.length > 0 ? (
-          result.tags.map((tag) => (
+          result.tags.map((tag:any) => (
             <RenderTags
               key={tag._id}
               _id={JSON.stringify(tag._id)}

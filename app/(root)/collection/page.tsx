@@ -1,16 +1,15 @@
 import Filters from '@/components/shared/Filters';
 import { QuestionFilters } from '@/constants/fitlers';
-import HomeFilters from '@/components/home/HomeFilters';
 
 import NoResults from '@/components/shared/NoResults';
 import QuestionCard from '@/components/card/QuestionCard';
 import { getAllSavedQuestions } from '@/lib/actions/questions.actions';
-import { auth } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import LocalSearch from '@/components/shared/search/LocalSearch';
 import { SearchPramsProps } from '@/types';
 
 export default async function Collections({ searchParams }: SearchPramsProps) {
-  const { userId } = auth();
+  const { userId } = useAuth();
   if (!userId) return null;
   const result = await getAllSavedQuestions({
     clerkId: userId,
@@ -39,7 +38,7 @@ export default async function Collections({ searchParams }: SearchPramsProps) {
 
       <div className="mt-5 flex w-full flex-col gap-6">
         {result.questions.length > 0 ? (
-          result.questions.map((question) => (
+          result.questions.map((question: any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
