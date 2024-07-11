@@ -1,4 +1,5 @@
-import { auth, ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
+import React from 'react'
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import '../styles/prism.css';

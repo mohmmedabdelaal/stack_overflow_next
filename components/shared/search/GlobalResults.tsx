@@ -71,7 +71,7 @@ const GlobalResults = () => {
         </p>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">
-            <ReloadIcon className="my-2 h-10 w-10 animate-spin text-primary-500" />
+            <ReloadIcon className="my-2 size-10 animate-spin text-primary-500" />
             <p className="text-dark-200_light800 body-semibold">
               Browsing the database
             </p>

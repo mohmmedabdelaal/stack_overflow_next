@@ -71,7 +71,7 @@ const Votes = ({type,itemId,userId,downvotes,upvotes,hasdownVoted,hasupVoted,has
                 <div className="flex gap-1.5">
                     <Image src={hasupVoted ? '/assets/icons/upvoted.svg' : '/assets/icons/upvote.svg'} height={18} width={18} alt="upvote"
                            onClick={() => handleVote('upvote')} className="cursor-pointer" />
-                    <div className="background-light700_dark400 min-w-[18px] p-1 rounded-sm">
+                    <div className="background-light700_dark400 min-w-[18px] rounded-sm p-1">
                         <p className="subtle-meduim text-dark-400_light700 ">
                             {formatAndDivideNumber(upvotes)}
                         </p>
@@ -80,7 +80,7 @@ const Votes = ({type,itemId,userId,downvotes,upvotes,hasdownVoted,hasupVoted,has
                 <div className="flex gap-1.5">
                     <Image src={hasdownVoted ? '/assets/icons/downvoted.svg' : '/assets/icons/downvote.svg'} height={18} width={18} alt="downvote"
                            onClick={() => handleVote('downvote')} className="cursor-pointer" />
-                    <div className="background-light700_dark400 min-w-[18px] p-1 rounded-sm">
+                    <div className="background-light700_dark400 min-w-[18px] rounded-sm p-1">
                         <p className="subtle-meduim text-dark-400_light700 ">
                             {formatAndDivideNumber(downvotes)}
                         </p>
