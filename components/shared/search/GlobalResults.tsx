@@ -56,7 +56,7 @@ const GlobalResults = () => {
     }
   };
   return (
-    <div className="background-light800_darkgradient absolute left-0 top-full z-50 mt-2 w-full max-w-[600px] rounded-xl py-6 shadow-sm dark:bg-dark-400">
+    <div className="background-light800_darkgradient absolute left-0 top-full z-50 mt-2 w-full max-w-[600px] flex-wrap rounded-xl py-6 shadow-sm dark:bg-dark-400 sm:max-w-[600px]">
       {/* Filter Buttons (Improved Styling) */}
 
       <GlobalFilters />
