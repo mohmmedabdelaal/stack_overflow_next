@@ -1,5 +1,5 @@
 import { getQuestionById } from '@/lib/actions/questions.actions';
-import { auth } from '@clerk/nextjs';
+import { auth, SignedIn } from '@clerk/nextjs';
 import { getUserById } from '@/lib/actions/user.actions';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -120,11 +120,13 @@ const Page = async ({ params }: any) => {
         />
       </div>
       <div>
-        <Answer
-          question={result.content}
-          authorId={JSON.stringify(mongodbUser?._id)}
-          questionId={JSON.stringify(result._id)}
-        />
+        <SignedIn>
+          <Answer
+            question={result.content}
+            authorId={JSON.stringify(mongodbUser?._id)}
+            questionId={JSON.stringify(result._id)}
+          />
+        </SignedIn>
       </div>
       {/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
       {/* Additional rendering based on your question structure */}
